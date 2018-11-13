@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dymatics.cogny.domain.persist.ObdDeviceVehicleRepository">
+
+  <resultMap type="ObdDeviceVehicle" id="obdDeviceVehicleResultMap"> 
+    <result property="obdDeviceVehicleNo" column="obd_device_vehicle_no" />
+    <result property="obdDeviceNo" column="obd_device_no" />
+    <result property="vehicleNo" column="vehicle_no" />
+    <result property="installDate" column="install_date" />
+    <association property="vehicle" column="{vehicleNo=vehicle_no}" select="io.dymatics.cogny.domain.persist.VehicleRepository.findByNo" />
+    <association property="obdDevice" column="{obdDeviceNo=obd_device_no}" select="io.dymatics.cogny.domain.persist.ObdDeviceRepository.findByNo" />
+  </resultMap>
+  <sql id="selectJoinObdDeviceVehicle">
+  SELECT
+    odv.*
+  FROM 
+    `obd_device_vehicle` odv
+    INNER JOIN obd_device od ON od.obd_device_no = odv.obd_device_no
+    INNER JOIN vehicle v ON v.vehicle_no = odv.vehicle_no
+  </sql>
+  <sql id="whereBusyObdDeviceVehicle">
+  WHERE
+    odv.`uninstall_date` IS NULL
+    AND v.partner_no = od.partner_no
+    <if test="currentUser.role.name() == 'PARTNER_MECHANIC'">
+      AND v.partner_no = #{currentUser.partnerNo}
+    </if>
+  </sql>
+  <update id="update">
+  UPDATE
+    `obd_device_vehicle` odv
+    INNER JOIN obd_device od ON od.obd_device_no = odv.obd_device_no
+    INNER JOIN vehicle v ON v.vehicle_no = odv.vehicle_no
+  SET
+    odv.`uninstall_date` = DATE(NOW()),
+    odv.`upd_date` = NOW()
+  WHERE 
+    odv.`obd_device_vehicle_no` = #{obdDeviceVehicle.obdDeviceVehicleNo}
+    AND v.partner_no = od.partner_no
+    <if test="currentUser.role.name() == 'PARTNER_MECHANIC'">
+      AND v.partner_no = #{currentUser.partnerNo}
+    </if>
+  </update>
+  <select id="findBusyByObdDevice" resultMap="obdDeviceVehicleResultMap">
+    <include refid="selectJoinObdDeviceVehicle" />
+    <include refid="whereBusyObdDeviceVehicle" />
+      AND odv.`obd_device_no` = #{obdDeviceNo}
+  </select>
+  <select id="findBusyByVehicle" resultMap="obdDeviceVehicleResultMap">
+    <include refid="selectJoinObdDeviceVehicle" />
+    <include refid="whereBusyObdDeviceVehicle" /> 
+    AND odv.`vehicle_no` = #{vehicleNo}
+  </select>
+</mapper>

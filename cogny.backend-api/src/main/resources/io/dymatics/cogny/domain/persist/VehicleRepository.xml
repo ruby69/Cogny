@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dymatics.cogny.domain.persist.VehicleRepository">
+
+  <resultMap type="Vehicle" id="vehicleResultMap">
+    <result property="vehicleNo" column="vehicle_no" />
+<!--     <association property="obdDevice" column="{vehicleNo=vehicle_no}" select="io.dymatics.cogny.domain.persist.ObdDeviceRepository.findBusyByVehicle" /> -->
+  </resultMap>
+
+  <select id="findByObd" resultType="Vehicle">
+    SELECT
+      v.*,
+      f.`name` AS `fuel_name`,
+      m.`name` AS `model_name`,
+      mf.`manufacturer_no`,
+      mf.`name` AS `manufacturer_name`
+    FROM
+      `obd_device_vehicle` odv
+      INNER JOIN `vehicle` v ON v.`vehicle_no` = odv.`vehicle_no` 
+      INNER JOIN `fuel` f ON f.`fuel_no` = v.`fuel_no`
+      INNER JOIN `model` m ON m.`model_no` = v.`model_no`
+      INNER JOIN `model_group` mg ON mg.`model_group_no` = m.`model_group_no`
+      INNER JOIN `manufacturer` mf ON mf.`manufacturer_no` = mg.`manufacturer_no`
+    WHERE odv.`obd_device_no` = #{value}
+  </select>
+
+  <select id="findOneByObd" resultType="Vehicle">
+    SELECT
+      v.*,
+      f.`name` AS `fuel_name`,
+      m.`name` AS `model_name`,
+      mf.`manufacturer_no`,
+      mf.`name` AS `manufacturer_name`
+    FROM
+      `obd_device_vehicle` odv
+      INNER JOIN `vehicle` v ON v.`vehicle_no` = odv.`vehicle_no` 
+      INNER JOIN `fuel` f ON f.`fuel_no` = v.`fuel_no`
+      INNER JOIN `model` m ON m.`model_no` = v.`model_no`
+      INNER JOIN `model_group` mg ON mg.`model_group_no` = m.`model_group_no`
+      INNER JOIN `manufacturer` mf ON mf.`manufacturer_no` = mg.`manufacturer_no`
+    WHERE
+      odv.`obd_device_no` = #{value}
+    ORDER BY odv.`install_date` DESC, odv.`obd_device_vehicle_no` DESC
+    LIMIT 1
+  </select>
+
+</mapper>

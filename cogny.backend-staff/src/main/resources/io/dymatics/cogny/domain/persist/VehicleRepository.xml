@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dymatics.cogny.domain.persist.VehicleRepository">
+  <resultMap type="Vehicle" id="vehicleResultMap">
+    <result property="vehicleNo" column="vehicle_no" />
+    <result property="fuelNo" column="fuel_no" />
+    <result property="fuel.fuelNo" column="fuel_no" />
+    <result property="fuel.name" column="fuel_name" />
+    <result property="modelNo" column="model_no" />
+    <result property="model.modelNo" column="model_no" />
+    <result property="model.name" column="model_name" />
+    <result property="model.modelGroupNo" column="model_group_no"/>
+    <result property="model.modelGroup.modelGroupNo" column="model_group_no"/>
+    <result property="model.modelGroup.name" column="model_group_name"/>
+    <result property="model.modelGroup.manufacturer.manufacturerNo" column="manufacturer_no" />
+    <result property="model.modelGroup.manufacturer.name" column="manufacturer_name" />
+    <result property="partnerNo" column="partner_no" />
+    <result property="partner.partnerNo" column="partner_no" />
+    <result property="partner.companyName" column="company_name" />
+    <result property="partner.partnerType" column="partner_type" />
+    <association property="obdDevice" column="{vehicleNo=vehicle_no}" select="io.dymatics.cogny.domain.persist.ObdDeviceRepository.findBusyByVehicle" />
+  </resultMap>
+
+  <resultMap type="Vehicle" id="vehicleResultMap2">
+    <result property="vehicleNo" column="vehicle_no" />
+    <result property="fuelNo" column="fuel_no" />
+    <result property="fuel.fuelNo" column="fuel_no" />
+    <result property="fuel.name" column="fuel_name" />
+    <result property="modelNo" column="model_no" />
+    <result property="model.modelNo" column="model_no" />
+    <result property="model.name" column="model_name" />
+    <result property="model.modelGroupNo" column="model_group_no"/>
+    <result property="model.modelGroup.modelGroupNo" column="model_group_no"/>
+    <result property="model.modelGroup.name" column="model_group_name"/>
+    <result property="model.modelGroup.manufacturer.manufacturerNo" column="manufacturer_no" />
+    <result property="model.modelGroup.manufacturer.name" column="manufacturer_name" />
+    <result property="obdInstallDate" column="install_date" />
+    <result property="partnerNo" column="partner_no" />
+    <result property="partner.partnerNo" column="partner_no" />
+    <result property="partner.companyName" column="company_name" />
+    <result property="partner.partnerType" column="partner_type" />
+  </resultMap>
+  <sql id="selectVehicle">
+    SELECT
+      v.*,
+      p.company_name,
+      p.partner_type,
+      f.`name` as `fuel_name`,
+      m.`name` as `model_name`,
+      mg.`model_group_no`,
+      mg.`name` as `model_group_name`,
+      mf.`manufacturer_no`,
+      mf.`name` as `manufacturer_name`,
+      vo.current_mileage
+  </sql>
+  <sql id="joinVehicle">
+    FROM
+      `vehicle` v
+      INNER JOIN `fuel` f ON f.`fuel_no` = v.`fuel_no`
+      INNER JOIN `model` m ON m.`model_no` = v.`model_no` AND m.enabled = TRUE
+      INNER JOIN `model_group` mg ON m.model_group_no = mg.model_group_no AND mg.enabled = TRUE
+      INNER JOIN `manufacturer` mf ON mf.`manufacturer_no` = mg.`manufacturer_no` AND mf.enabled = TRUE
+      INNER JOIN `partner` p on v.`partner_no` = p.`partner_no` and p.`enabled` = TRUE
+      LEFT JOIN (
+        SELECT
+            dh.vehicle_no,
+            dh.end_mileage AS current_mileage
+        FROM drive_history dh
+            INNER JOIN (
+                SELECT
+                    v.vehicle_no,
+                    MAX(dh.drive_history_no) AS max_drive_history_no
+                FROM vehicle v
+                    INNER JOIN drive_history dh ON v.vehicle_no = dh.vehicle_no
+                WHERE
+                    v.enabled = TRUE
+                    AND dh.end_mileage IS NOT NULL
+                GROUP BY
+                    v.vehicle_no
+            ) `do` ON do.max_drive_history_no = dh.drive_history_no
+          ) vo ON v.vehicle_no = vo.vehicle_no
+  </sql>
+  <sql id="whereByPage">
+    WHERE
+      v.`enabled` = TRUE
+      <if test="@org.springframework.util.StringUtils@hasText(query)">
+        AND (
+          v.`license_no` LIKE CONCAT('%', #{query}, '%')
+          OR m.`name` LIKE CONCAT('%', #{query}, '%')
+          OR mf.`name` LIKE CONCAT('%', #{query}, '%')
+        )
+      </if>
+      <if test="@org.springframework.util.StringUtils@hasText(vehicleStatus) and vehicleStatus == 'FREE'">
+        AND ov.vehicle_no IS NULL
+      </if>
+      <choose>
+        <when test="authorizedPartnerNo != null">
+          AND v.partner_no = #{authorizedPartnerNo}
+        </when>
+      </choose>
+  </sql>
+
+  <select id="findByNo" resultMap="vehicleResultMap">
+    <include refid="selectVehicle" />
+    <include refid="joinVehicle" />
+    WHERE v.`vehicle_no` = #{vehicleNo}
+  </select>
+
+  <select id="findAll" resultMap="vehicleResultMap">
+    <include refid="selectVehicle" />
+    <include refid="joinVehicle" />
+    WHERE v.`enabled` = TRUE
+    ORDER BY v.`vehicle_no` DESC
+  </select>
+  <select id="countByPage" resultType="Integer">
+    SELECT COUNT(1)
+    <include refid="joinVehicle" />
+      <if test="@org.springframework.util.StringUtils@hasText(vehicleStatus) and vehicleStatus == 'FREE'">
+      LEFT JOIN obd_device_vehicle ov ON ov.vehicle_no = v.vehicle_no AND uninstall_date IS NULL 
+      </if>
+    <include refid="whereByPage" />
+  </select>
+
+  <select id="findByPage" resultMap="vehicleResultMap">
+    <include refid="selectVehicle" />
+    <include refid="joinVehicle" />
+      <if test="@org.springframework.util.StringUtils@hasText(vehicleStatus) and vehicleStatus == 'FREE'">
+      LEFT JOIN obd_device_vehicle ov ON ov.vehicle_no = v.vehicle_no AND uninstall_date IS NULL 
+      </if>
+    <include refid="whereByPage" />
+    ORDER BY v.`vehicle_no` DESC
+    LIMIT #{beginIndex}, #{scale}
+  </select>
+  <update id="update">
+  UPDATE `vehicle` 
+  SET 
+    `model_no` = #{modelNo}, 
+    `fuel_no` = #{fuelNo}, 
+    `license_no` = #{licenseNo}, 
+    `model_year` = #{modelYear}, 
+    `model_month` = #{modelMonth},
+    `memo` = #{memo},
+    `upd_date` = NOW() 
+  WHERE 
+    `vehicle_no` = #{vehicleNo}
+    AND `partner_no` = #{partnerNo}
+  </update>
+  <update id="delete">
+  UPDATE `vehicle` 
+  SET 
+    `enabled` = false, 
+    `del_date` = NOW() 
+  WHERE `vehicle_no` = #{vehicleNo}
+  <if test="currentUser.role.name() == 'PARTNER_MECHANIC'">
+    AND partner_no = #{currentUser.partnerNo}
+  </if>
+  </update>
+  <select id="findByObdDevice" resultMap="vehicleResultMap2">
+    <include refid="selectVehicle" />
+      , odv.`obd_device_vehicle_no`
+      , odv.`install_date`
+
+    <include refid="joinVehicle" /> 
+      INNER JOIN `obd_device_vehicle` odv ON v.`vehicle_no` = odv.`vehicle_no`
+
+    WHERE
+      odv.`obd_device_no` = #{obdDeviceNo}
+      AND odv.`uninstall_date` IS NULL
+  </select>
+  <select id="findSalesYearByNo" resultType="io.dymatics.cogny.domain.model.Vehicle$Model">
+    SELECT
+      model_no,
+      begin_year,
+      end_year
+    FROM
+      model
+    WHERE
+      model_no = #{modelNo}
+      AND enabled = TRUE
+  </select>
+</mapper>

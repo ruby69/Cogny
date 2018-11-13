@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/appBarLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:theme="@style/AppTheme.AppBarOverlay">
+
+      <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="?android:attr/colorPrimary" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:clipToPadding="false"
+      android:paddingBottom="@dimen/spacing_5x">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/spacing_2x"
+        android:orientation="vertical">
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="앱설정"
+          android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+          android:textColor="@color/textColorPrimary" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_1x"
+          android:background="@drawable/bg_box_edge_grey2"
+          android:orientation="vertical">
+
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_box_edge_grey2"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+              android:layout_width="100dp"
+              android:layout_height="wrap_content"
+              android:paddingStart="@dimen/spacing_2x"
+              android:paddingTop="@dimen/spacing_2x"
+              android:paddingBottom="@dimen/spacing_2x"
+              android:text="@string/label_common_version"
+              android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+              android:textColor="@color/grey" />
+
+            <LinearLayout
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="@dimen/spacing_1x"
+              android:layout_weight="1"
+              android:orientation="vertical"
+              android:padding="@dimen/spacing_2x">
+
+              <TextView
+                android:id="@+id/versionView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+              <TextView
+                android:id="@+id/versionMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_1x"
+                android:text="@string/label_common_version_latest"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/grey"
+                android:visibility="gone" />
+
+              <Button
+                android:id="@+id/updateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_1x"
+                android:background="@drawable/button_bg_accent"
+                android:minHeight="@dimen/spacing_1x"
+                android:paddingStart="@dimen/spacing_2x"
+                android:paddingTop="@dimen/spacing_half"
+                android:paddingEnd="@dimen/spacing_2x"
+                android:paddingBottom="@dimen/spacing_half"
+                android:text="@string/label_common_update"
+                android:textColor="@android:color/white"
+                android:visibility="gone" />
+
+            </LinearLayout>
+
+          </LinearLayout>
+
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-1dp"
+            android:background="@drawable/bg_box_edge_grey2"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+              android:layout_width="100dp"
+              android:layout_height="wrap_content"
+              android:paddingStart="@dimen/spacing_2x"
+              android:paddingTop="@dimen/spacing_2x"
+              android:paddingBottom="@dimen/spacing_2x"
+              android:text="@string/label_font_scale"
+              android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+              android:textColor="@color/grey" />
+
+            <Spinner
+              android:id="@+id/spinner"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="@dimen/spacing_1x"
+              android:padding="@dimen/spacing_2x" />
+
+          </LinearLayout>
+
+        </LinearLayout>
+
+      </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

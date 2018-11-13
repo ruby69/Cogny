@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.dymatics.cogny.domain.persist.DtcRepository">
+
+  <!-- dtc_raw 테이블 -->
+  <select id="findByDriveHistoryNo" resultType="DtcRaw">
+    SELECT dr.*,
+      d.desc
+    FROM dtc_raw dr
+      INNER JOIN vehicle v ON v.vehicle_no = dr.vehicle_no
+      INNER JOIN model m ON m.model_no = v.model_no
+      INNER JOIN model_group mg ON mg.model_group_no = m.model_group_no
+      LEFT JOIN dtc d ON dr.dtc_code = d.code AND d.manufacturer_no = mg.manufacturer_no
+    WHERE dr.drive_history_no = #{driveHistoryNo}
+    ORDER BY dr.dtc_code, dr.dtc_issued_time
+  </select>
+  <!-- dtc_history 테이블 -->
+  <insert id="insertDtcHistory" useGeneratedKeys="true" keyProperty="dtcHistoryNo">
+    INSERT INTO `dtc_history` (`vehicle_no`, `obd_device_no`, `drive_history_no`, `dtc_issued_time`, `dtc_code`, `reg_date`)
+    VALUES (#{vehicleNo}, #{obdDeviceNo}, #{driveHistoryNo}, #{dtcIssuedTime}, #{dtcCode}, NOW())
+  </insert>
+  <update id="updateDtcHistory">
+    UPDATE `dtc_history` 
+    SET
+        `upd_date` = NOW()
+    WHERE
+        `dtc_history_no` = #{dtcHistoryNo}
+  </update>
+  <select id="findByVehicleDtcCode" resultType="DtcHistory">
+    SELECT  *
+    FROM 
+        `dtc_history` 
+    WHERE (repair_no IS NULL OR drive_history_no = #{driveHistoryNo})
+        AND vehicle_no = #{vehicleNo}
+        AND dtc_code = #{dtcCode}
+  </select>
+<!--   <select id="findDistinctDtc" resultType="DtcRaw">
+    SELECT drive_history_no, dtc_code
+    FROM dtc_raw
+    WHERE drive_history_no = #{driveHistoryNo}
+    GROUP BY drive_history_no, dtc_code
+  </select> -->
+</mapper>

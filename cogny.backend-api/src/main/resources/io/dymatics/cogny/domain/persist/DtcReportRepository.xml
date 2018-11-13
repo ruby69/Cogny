@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dymatics.cogny.domain.persist.DtcReportRepository">
+
+  <resultMap type="DtcReport" id="dtcReportMap">
+    <result property="vehicleNo" column="vehicle_no" />
+    <result property="driveHistoryNo" column="drive_history_no" />
+    <association property="userMobileDevice" column="{userMobileDeviceNo=user_mobile_device_no}" select="findUserMobileDeviceByUid" />
+    <collection property="dtcs" column="{vehicleNo=vehicle_no}" select="findInfos" />
+  </resultMap>
+
+  <select id="findByPartner" resultMap="dtcReportMap">
+    SELECT
+      dh.`start_date` AS `drive_date`,
+      v.`license_no`,
+      COUNT(DISTINCT dr.`dtc_code`) AS `dtc_count`,
+      CONCAT(m.`name`, '(', v.`model_year`, ')') AS `model`,
+      CASE WHEN dh.`end_mileage` IS NULL THEN dh.`start_mileage` ELSE dh.`end_mileage` END AS `odometer`,      
+      CASE WHEN dh.`end_time` IS NULL THEN TRUE ELSE FALSE END AS `driving`,
+      d.`last_drive_history_no` AS `drive_history_no`,
+      dh.`vehicle_no`,
+      dh.`obd_device_no`,
+      dh.`user_mobile_device_no`
+    FROM 
+      (
+        SELECT
+          `vehicle_no`,
+          MAX(`drive_history_no`) AS `last_drive_history_no`
+        FROM `drive_history`
+        GROUP BY `vehicle_no`
+      ) d
+      INNER JOIN `drive_history` dh ON d.`last_drive_history_no` = dh.`drive_history_no`
+      INNER JOIN `vehicle` v ON d.`vehicle_no` = v.`vehicle_no`
+      INNER JOIN model m ON v.`model_no` = m.`model_no`
+      LEFT JOIN `dtc_raw` dr ON d.`last_drive_history_no` = dr.`drive_history_no`
+    WHERE v.`partner_no` = #{value }
+    GROUP BY dh.`start_date`, d.`vehicle_no`
+    ORDER BY dh.`start_date` DESC, `dtc_count` DESC
+  </select>
+
+  <select id="findInfos" resultType="io.dymatics.cogny.domain.model.DtcReport$DtcInfo">
+    SELECT 
+      dh.`dtc_code`,
+      d.`desc`,
+      dh.`dtc_issued_time` AS `issued_time`
+    FROM
+      `dtc_history` dh
+      INNER JOIN vehicle v ON dh.`vehicle_no` = v.`vehicle_no`
+      INNER JOIN model m ON v.`model_no` = m.`model_no`
+      INNER JOIN model_group mg ON m.`model_group_no` = mg.`model_group_no`
+      INNER JOIN dtc d ON mg.`manufacturer_no` = d.`manufacturer_no` AND dh.`dtc_code` = d.`code`
+    WHERE
+      dh.`vehicle_no`  = #{vehicleNo }
+      AND `repair_no` IS NULL
+  </select>
+
+  <select id="findUserMobileDeviceByUid" resultType="io.dymatics.cogny.domain.model.MobileDevice$UserMobileDevice">
+    SELECT 
+      umd.*,
+      u.`name`
+    FROM
+      `user_mobile_device` umd
+      INNER JOIN `user` u ON umd.`user_no` = u.`user_no`
+    WHERE
+      umd.`user_mobile_device_no` = #{userMobileDeviceNo}
+  </select>
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <LinearLayout
+    android:id="@+id/noInviteMessage"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:layout_marginStart="@dimen/spacing_3x"
+    android:layout_marginTop="@dimen/spacing_7x"
+    android:layout_marginEnd="@dimen/spacing_3x"
+    android:layout_marginBottom="@dimen/spacing_7x"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:text="@string/message_common_no_invite"
+      android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/spacing_3x"
+      android:gravity="center"
+      android:text="@string/message_common_call_center"
+      android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+  </LinearLayout>
+
+  <ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_above="@+id/noInviteMessage"
+    android:layout_centerHorizontal="true"
+    android:src="@drawable/logo_report" />
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/noInviteMessage"
+    android:orientation="horizontal">
+
+    <Button
+      android:id="@+id/toCall"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/spacing_1x"
+      android:layout_weight="1"
+      android:background="@drawable/button_bg_accent"
+      android:gravity="center"
+      android:text="@string/label_common_call_center"
+      android:textColor="@android:color/white" />
+
+    <Button
+      android:id="@+id/toFinish"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/spacing_1x"
+      android:layout_weight="1"
+      android:background="@drawable/button_bg_accent"
+      android:gravity="center"
+      android:text="@string/label_common_finish"
+      android:textColor="@android:color/white" />
+
+  </LinearLayout>
+</RelativeLayout>

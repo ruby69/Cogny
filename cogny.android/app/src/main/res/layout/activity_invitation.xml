@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@android:color/white">
+
+  <LinearLayout
+    android:id="@+id/permissionsLayer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone">
+
+    <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/spacing_4x"
+        android:paddingEnd="@dimen/spacing_4x">
+
+        <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:src="@drawable/logo_taxi"/>
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginTop="@dimen/spacing_5x"
+          android:gravity="center"
+          android:text="@string/message_permission_required"
+          android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_5x"
+          android:orientation="horizontal">
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_local_phone_black_24dp"/>
+
+          <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_2x"
+            android:orientation="vertical">
+
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/label_permission_phone"
+              android:textAppearance="@style/TextAppearance.AppCompat.Title"
+              android:textStyle="bold"/>
+
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/message_permission_phone"
+              android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+          </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_2x"
+          android:orientation="horizontal">
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_place_black_24dp"/>
+
+          <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_2x"
+            android:orientation="vertical">
+
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/label_permission_location"
+              android:textAppearance="@style/TextAppearance.AppCompat.Title"
+              android:textStyle="bold"/>
+
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/message_permission_location"
+              android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+          </LinearLayout>
+        </LinearLayout>
+
+        <Button
+          android:id="@+id/checkPermission"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginTop="@dimen/spacing_5x"
+          android:layout_marginBottom="@dimen/spacing_2x"
+          android:layout_marginStart="@dimen/spacing_1x"
+          android:layout_marginEnd="@dimen/spacing_1x"
+          android:background="@drawable/button_bg_accent"
+          android:gravity="center"
+          android:text="@string/label_permission_grant"
+          android:textColor="@android:color/white"/>
+
+      </LinearLayout>
+    </ScrollView>
+
+  </LinearLayout>
+
+  <RelativeLayout
+    android:id="@+id/invitationLayer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone">
+
+    <LinearLayout
+      android:id="@+id/noInviteMessage"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:layout_marginStart="@dimen/spacing_3x"
+      android:layout_marginTop="@dimen/spacing_7x"
+      android:layout_marginEnd="@dimen/spacing_3x"
+      android:layout_marginBottom="@dimen/spacing_7x"
+      android:gravity="center"
+      android:orientation="vertical">
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/message_common_no_invite"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_3x"
+        android:gravity="center"
+        android:text="@string/message_common_call_center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+    </LinearLayout>
+
+    <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_above="@+id/noInviteMessage"
+      android:layout_centerHorizontal="true"
+      android:src="@drawable/logo_taxi"/>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/noInviteMessage"
+      android:orientation="horizontal">
+
+      <Button
+        android:id="@+id/toCall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_1x"
+        android:layout_weight="1"
+        android:background="@drawable/button_bg_accent"
+        android:gravity="center"
+        android:text="@string/label_common_call_center"
+        android:textColor="@android:color/white" />
+
+      <Button
+        android:id="@+id/toFinish"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_1x"
+        android:layout_weight="1"
+        android:background="@drawable/button_bg_accent"
+        android:gravity="center"
+        android:text="@string/label_common_finish"
+        android:textColor="@android:color/white" />
+
+    </LinearLayout>
+  </RelativeLayout>
+</RelativeLayout>

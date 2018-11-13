@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:layout_marginEnd="@dimen/spacing_1x"
+      android:src="@drawable/indicator_circle" />
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/label_drive_latest"
+      android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+      android:textColor="@color/textColorPrimary"
+      android:textStyle="bold" />
+  </LinearLayout>
+
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="2dp"
+    android:layout_marginTop="@dimen/spacing_1x"
+    android:layout_marginBottom="@dimen/spacing_1x"
+    android:background="@color/grey" />
+
+  <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_1x"
+    android:background="@drawable/bg_box_edge_grey">
+
+    <LinearLayout
+      android:id="@+id/driveStatusLayer"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:orientation="vertical"
+      android:visibility="gone">
+
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_2x"
+        android:layout_marginTop="@dimen/spacing_1x"
+        android:layout_marginEnd="@dimen/spacing_2x"
+        android:layout_marginBottom="@dimen/spacing_1x">
+
+        <TextView
+          android:id="@+id/lastDriveDate"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+          android:textColor="@color/textColorPrimary"
+          android:visibility="gone" />
+
+        <LinearLayout
+          android:id="@+id/driveStatus"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentEnd="true"
+          android:gravity="center_vertical"
+          android:orientation="horizontal"
+          android:visibility="gone">
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_driving_car"
+            android:layout_marginTop="@dimen/spacing_quarter"/>
+
+          <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_quarter"
+            android:gravity="end"
+            android:text="@string/label_drive_ing"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="@color/colorAccent" />
+        </LinearLayout>
+
+      </RelativeLayout>
+
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/spacing_2x"
+        android:layout_marginEnd="@dimen/spacing_2x"
+        android:background="@color/grey2" />
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_3x"
+        android:layout_marginBottom="@dimen/spacing_3x"
+        android:orientation="horizontal">
+
+        <LinearLayout
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:orientation="vertical">
+
+          <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/button_round_bg_white"
+            android:paddingStart="@dimen/spacing_1x"
+            android:paddingTop="@dimen/spacing_quarter"
+            android:paddingEnd="@dimen/spacing_1x"
+            android:paddingBottom="@dimen/spacing_quarter"
+            android:text="@string/label_drive_time"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="@color/textColorPrimary" />
+
+          <TextView
+            android:id="@+id/driveTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/spacing_1x"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/textColorPrimary"
+            android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:orientation="vertical">
+
+          <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/button_round_bg_white"
+            android:paddingStart="@dimen/spacing_1x"
+            android:paddingTop="@dimen/spacing_quarter"
+            android:paddingEnd="@dimen/spacing_1x"
+            android:paddingBottom="@dimen/spacing_quarter"
+            android:text="@string/label_drive_distance"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="@color/textColorPrimary" />
+
+          <TextView
+            android:id="@+id/driveDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/spacing_1x"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/textColorPrimary"
+            android:textStyle="bold" />
+
+        </LinearLayout>
+      </LinearLayout>
+
+      <TextView
+        android:id="@+id/driveDurationTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_box_grey"
+        android:gravity="center"
+        android:paddingTop="@dimen/spacing_2x"
+        android:paddingBottom="@dimen/spacing_2x"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@color/grey" />
+
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/driveNoneLayer"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:layout_marginStart="@dimen/spacing_2x"
+      android:layout_marginTop="@dimen/spacing_3x"
+      android:layout_marginEnd="@dimen/spacing_2x"
+      android:layout_marginBottom="@dimen/spacing_3x"
+      android:gravity="center"
+      android:orientation="vertical">
+
+      <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_warning_g" />
+
+      <TextView
+        android:id="@+id/driveNoneMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/spacing_2x"
+        android:gravity="center"
+        android:text="@string/label_drive_none"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@color/grey"
+        android:textStyle="bold" />
+    </LinearLayout>
+  </FrameLayout>
+
+  <LinearLayout
+    android:id="@+id/repairMsgLayer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/spacing_1x"
+    android:paddingTop="@dimen/spacing_2x"
+    android:paddingEnd="@dimen/spacing_1x"
+    android:paddingBottom="@dimen/spacing_2x"
+    android:visibility="gone">
+
+    <TextView
+      android:id="@+id/repairMsgView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+      android:textColor="@android:color/white"
+      android:textStyle="bold" />
+
+  </LinearLayout>
+</LinearLayout>
+
+

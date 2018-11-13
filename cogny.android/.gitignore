@@ -1,0 +1,14 @@
+*.iml
+.gradle/
+/local.properties
+/.idea/workspace.xml
+/.idea/caches
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+**/*.apk
+app/forAlpha/release/output.json
+app/forRelease/
+app/forProduct/release/output.json

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dymatics.cogny.domain.persist.DriveHistoryRepository">
+  <resultMap type="DriveHistory" id="driveHistoryResultMap">
+    <result property="driveHistoryNo" column="drive_history_no" />
+    <result property="vehicleNo" column="vehicle_no" />
+    <result property="obdDeviceNo" column="obd_device_no" />
+    <result property="userNo" column="user_no" />
+
+    <result property="vehicle.vehicleNo" column="vehicle_no" />
+    <result property="vehicle.modelNo" column="model_no" />
+    <result property="vehicle.licenseNo" column="license_no" />
+    <result property="vehicle.modelYear" column="model_year" />
+    <result property="vehicle.modelMonth" column="model_month" />
+    <result property="vehicle.partnerNo" column="partner_no" />
+
+    <result property="vehicle.model.modelNo" column="model_no" />
+    <result property="vehicle.model.name" column="model_name" />
+
+    <result property="vehicle.partner.partnerNo" column="partner_no" />
+    <result property="vehicle.partner.companyName" column="company_name" />
+
+    <result property="obdDevice.obdDeviceNo" column="obd_device_no" />
+    <result property="obdDevice.obdSerial" column="obd_serial" />
+
+    <result property="user.userNo" column="user_no" />
+    <result property="user.name" column="user_name" />
+    
+    <result property="driveHistoryMemo.driveHistoryMemoNo" column="drive_history_memo_no"/>
+    <result property="driveHistoryMemo.driveHistoryNo" column="memo_dreive_history_no"/>
+    <result property="driveHistoryMemo.memo" column="memo"/>
+  </resultMap>
+
+  <!-- 운행기록 조회 --> 
+  <select id="findStartDates" resultType="DriveHistory">
+    SELECT DISTINCT
+      start_date
+    FROM drive_history
+    WHERE vehicle_no = #{vehicleNo}
+    ORDER BY start_date;
+  </select>
+  
+  <select id="findDriveHistoryIndexes" resultType="DriveHistory">
+    SELECT
+        drive_history_no,
+        start_date,
+        start_time
+    FROM 
+        drive_history
+    WHERE 
+        start_date = #{startDate}
+        AND vehicle_no = #{vehicleNo};
+  </select>
+  <select  id="findDriveHistoryByDiagnosisHistory" flushCache="true" useCache="false" resultType="DriveHistory">
+    SELECT *
+    FROM drive_history
+    WHERE
+        <if test="startDate != null">
+        ADDTIME(start_date, start_time) >= #{startDate}
+        </if>
+        <if test="startDate == null">
+        ADDTIME(start_date, start_time) >= ADDDATE(NOW(), -7)
+        </if>
+  </select>
+  
+  <select id="findByNo" resultMap="driveHistoryResultMap">
+    SELECT 
+        dh.*,
+        u.name as user_name,
+        dm.drive_history_memo_no,
+        dm.drive_history_no as memo_dreive_history_no,
+        dm.memo
+    FROM drive_history dh
+        INNER JOIN vehicle v ON v.vehicle_no = dh.vehicle_no AND v.enabled = TRUE
+        INNER JOIN user u ON u.user_no = dh.user_no
+        LEFT JOIN drive_history_memo dm ON dh.drive_history_no = dm.drive_history_no
+    WHERE 
+        dh.drive_history_no = #{driveHistoryNo};
+  </select>
+  <sql id="selectSql">
+    SELECT 
+      dh.*,
+      v.license_no,
+      v.model_no,
+      v.model_year,
+      v.model_month,
+      v.partner_no,
+
+      m.name AS model_name,
+
+      p.company_name,
+
+      od.obd_serial,
+      u.name AS user_name
+  </sql>
+  <sql id="joinSql">
+    FROM 
+      drive_history dh
+    INNER JOIN vehicle v ON dh.vehicle_no = v.vehicle_no
+    INNER JOIN model m ON v.model_no = m.model_no
+    INNER JOIN obd_device od ON dh.obd_device_no = od.obd_device_no
+    INNER JOIN `user` u ON dh.user_no = u.user_no
+    INNER JOIN (
+      SELECT
+        dr.drive_history_no,
+        COUNT(1) AS dtc_raw_cnt
+      FROM dtc_raw dr
+      GROUP BY dr.drive_history_no
+      ) dr ON dh.drive_history_no = dr.drive_history_no
+    LEFT JOIN partner p ON v.partner_no = p.partner_no 
+  </sql>
+  <sql id="whereSql">
+    WHERE 
+        v.enabled = TRUE
+        <if test="vehicleNo != null" >
+          AND dh.vehicle_no = #{vehicleNo}
+        </if>
+        <if test="currentUser != null and currentUser.role.name() == 'PARTNER_MECHANIC'" >
+          AND v.partner_no = #{currentUser.partnerNo}
+        </if>
+  </sql>
+  <select id="countByPage" resultType="Integer">
+    SELECT COUNT(1)
+    <include refid="joinSql" />
+    <include refid="whereSql" />
+  </select>
+  <select id="findByPage" resultMap="driveHistoryResultMap">
+    <include refid="selectSql" />
+    <include refid="joinSql" />
+    <include refid="whereSql" />
+    ORDER BY dh.drive_history_no DESC
+    LIMIT #{beginIndex}, #{scale}
+  </select>
+  <update id="finishDriveHistory">
+    UPDATE drive_history
+    SET 
+        end_time = #{endTime},
+        end_mileage = #{endMileage},
+        drive_distance = #{driveDistance},
+        upd_date = now()
+    WHERE drive_history_no = #{driveHistoryNo}
+  </update>
+  <!-- 운행이력 메모(drive_history_memo) 테이블-->
+  <insert id="insertMemo" useGeneratedKeys="true" keyProperty="driveHistoryMemoNo">
+    INSERT INTO `drive_history_memo`
+      (`drive_history_no`,`memo`,`enabled`,`reg_date`)
+    VALUES
+      (#{driveHistoryNo},#{memo},TRUE,NOW())
+  </insert>
+  <update id="updateMemo">
+    UPDATE `drive_history_memo` 
+    SET 
+      `memo` = #{memo},
+      `upd_date` = NOW() 
+    WHERE 
+      `drive_history_memo_no` = #{driveHistoryMemoNo}
+      AND `drive_history_no` = #{driveHistoryNo}
+  </update>
+  <select id="findMemoByNo" resultType="io.dymatics.cogny.domain.model.DriveHistory$DriveHistoryMemo">
+    SELECT
+      *
+    FROM drive_history_memo
+    WHERE 
+      drive_history_memo_no = #{driveHistoryMemoNo}
+      AND enabled = TRUE
+  </select>
+  <!-- 운전자 안내 메시지(drive_repair_log) 테이블 -->
+  <insert id="insertDriveRepairLogForDrive" useGeneratedKeys="true" keyProperty="driveRepairLogNo">
+    INSERT INTO drive_repair_log (`vehicle_no`, `user_no`, `drive_time`, `drive_mileage`, `total_mileage`, `ref`, `ref_no`, `date_idx`)
+    VALUES (#{vehicleNo}, #{userNo}, #{driveTime}, #{driveMileage}, #{totalMileage}, 'DRIVE', #{refNo}, DATE_FORMAT(#{startDate},'%Y%m%d'))
+  </insert>
+  <select id="findDriveRepairLogByDriveHistoryNo" flushCache="true" useCache="false" resultType="io.dymatics.cogny.domain.model.DriveHistory$DriveRepairLog">
+    SELECT *
+    FROM drive_repair_log 
+    WHERE ref_no = #{driveHistoryNo} AND ref = 'DRIVE'
+  </select>
+  <update id="updateDriveRepairLogForDrive">
+    UPDATE
+        `drive_repair_log`
+    SET
+        `drive_time` = #{driveTime},
+        `drive_mileage` = #{driveMileage}, 
+        `total_mileage` = #{totalMileage},
+        `upd_date` = NOW()
+    WHERE 
+        `drive_repair_log_no` = #{driveRepairLogNo}
+  </update>
+</mapper>

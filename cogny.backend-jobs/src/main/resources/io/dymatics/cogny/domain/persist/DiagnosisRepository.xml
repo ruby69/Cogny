@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.dymatics.cogny.domain.persist.DiagnosisRepository">
+  <resultMap type="io.dymatics.cogny.domain.model.DiagnosisItem" id="diagnosisItemResultMapWithCriteria">
+    <result property="diagnosisItemNo" column="diagnosis_item_no"/>
+    <association property="diagnosisCriteriaList" column="{diagnosisItemNo=diagnosis_item_no}" select="findDiagnosisCriteriaByItemNo"/>
+  </resultMap>
+  <resultMap type="io.dymatics.cogny.domain.model.Diagnosis$DiagnosisDriveHistory" id="diagnosisDriveHistoryResultMap">
+    <result property="driveHistoryNo" column="drive_history_no"/>
+    <result property="driveHistory.driveHistoryNo" column="drive_history_no"/>
+    <result property="driveHistory.vehicleNo" column="vehicle_no"/>
+    <result property="driveHistory.startDate" column="start_date"/>
+    <result property="driveHistory.startTime" column="start_time"/>
+    <result property="driveHistory.endTime" column="end_time"/>
+    <result property="lastDiagnosisHistoryNo" column="last_diagnosis_history_no"/>
+    <result property="diagnosisHistory.diagnosisHistoryNo" column="last_diagnosis_history_no"/>
+    <result property="diagnosisHistory.startDate" column="diagnosis_start_date"/>
+  </resultMap>
+  <!-- 진단(diagnosis) 테이블 -->
+  <insert id="insertDiagnosis" useGeneratedKeys="true" keyProperty="diagnosisNo">
+    INSERT INTO `diagnosis` (`diagnosis_history_no`, `vehicle_no`, `drive_history_no`, `diagnosis_item_no`, `diagnosis_result`, `diagnosis_msg`, `repair_no`, `reg_date`)
+    VALUES (#{diagnosisHistoryNo}, #{vehicleNo}, #{driveHistoryNo}, #{diagnosisItemNo}, #{diagnosisResult}, #{diagnosisMsg}, #{repairNo}, NOW())
+  </insert>
+  <select id="findPrevDiagnosis" flushCache="true" useCache="false" resultType="Diagnosis">
+    SELECT *
+    FROM diagnosis
+    WHERE vehicle_no = #{vehicleNo} 
+      AND diagnosis_item_no = #{diagnosisItemNo}
+      AND (repair_no IS NULL OR drive_history_no = #{driveHistoryNo})
+  </select>
+  <update id="updateDiagnosisResult">
+    UPDATE
+      diagnosis
+    SET 
+      diagnosis_history_no = #{diagnosisHistoryNo},
+      drive_history_no = #{driveHistoryNo},
+      diagnosis_result = #{diagnosisResult},
+      diagnosis_msg = #{diagnosisMsg},
+      upd_date = NOW()
+    WHERE diagnosis_no = #{diagnosisNo}
+  </update>
+
+  <!-- 진단 항목(diagnosis_item) 테이블 처리 -->
+  <select id="findDiagnosisItemByDriveHistoryNo" flushCache="true" useCache="false" resultMap="diagnosisItemResultMapWithCriteria">
+    SELECT di.*
+    FROM diagnosis_item di
+        INNER JOIN diagnosis_item_model dim ON dim.diagnosis_item_no = di.diagnosis_item_no AND dim.enabled = TRUE
+        INNER JOIN vehicle v ON v.model_no = dim.model_no AND v.fuel_no = dim.fuel_no
+        INNER JOIN drive_history dh ON dh.vehicle_no = v.vehicle_no
+    WHERE dh.drive_history_no = #{driveHistoryNo}
+        AND di.enabled = TRUE;
+  </select>
+  <!-- 진단 이력 테이블(diagnosis_history) 처리 -->
+  <insert id="insertDiagnosisHistory" useGeneratedKeys="true" keyProperty="diagnosisHistoryNo" keyColumn="diagnosis_history_no">
+    INSERT INTO `diagnosis_history` (`start_date`, `diagnosis_type`)
+    VALUES (NOW(), #{diagnosisType})
+  </insert>
+  <select id="findLastDiagnosisHistory" flushCache="true" useCache="false" resultType="io.dymatics.cogny.domain.model.Diagnosis$DiagnosisHistory">
+    SELECT *
+    FROM diagnosis_history
+    WHERE end_date IS NOT NULL
+    ORDER BY diagnosis_history_no DESC
+    LIMIT 1
+  </select>
+  <select id="findDiagnosisHistoryByNo" flushCache="true" useCache="false" resultType="io.dymatics.cogny.domain.model.Diagnosis$DiagnosisHistory">
+    SELECT *
+    FROM diagnosis_history
+    WHERE diagnosis_history_no = #{diagnosisHistoryNo}
+  </select>
+  <update id="updateRecentDiagnosisDate">
+    UPDATE 
+        diagnosis_history
+    SET
+        recent_diagnosis_date = NOW()
+    WHERE 
+        diagnosis_history_no = #{diagnosisHistoryNo}
+  </update>
+  <update id="finishDiagnosisHistory">
+    UPDATE 
+        diagnosis_history
+    SET 
+        drive_history_cnt = #{driveHistoryCnt},
+        end_date = NOW()
+    WHERE 
+        diagnosis_history_no = #{diagnosisHistoryNo}
+  </update>
+  <insert id="insertDiagnosisDriveHistory">
+    INSERT INTO `diagnosis_drive_history` (`drive_history_no`, `reg_date`)
+    VALUES (#{driveHistoryNo}, NOW())
+    ON DUPLICATE KEY UPDATE upd_date = NOW()
+  </insert>
+  <select id="findDiagnosisDriveHistory" flushCache="true" useCache="false" resultMap="diagnosisDriveHistoryResultMap">
+    SELECT 
+      dd.drive_history_no,
+      dd.last_diagnosis_history_no,
+      dd.final_diagnosis_date,
+      dd.reg_date,
+      dd.upd_date,
+
+      dh.vehicle_no,
+      dh.start_date,
+      dh.start_time,
+      dh.end_time,
+
+      di.start_date AS diagnosis_start_date
+    FROM diagnosis_drive_history dd
+      INNER JOIN drive_history dh ON dd.drive_history_no = dh.drive_history_no
+      LEFT JOIN diagnosis_history di ON dd.last_diagnosis_history_no = di.diagnosis_history_no
+    WHERE 
+      dd.final_diagnosis_date IS NULL
+      AND fail_diagnosis_date IS NULL
+      AND ( di.start_date IS NULL 
+            OR DATE_ADD(di.start_date, INTERVAL ${diagnosisIntervalSec} SECOND) &lt; #{currentDiagnosisTime}
+            )
+  </select>
+  <update id="updateDiagnosisDriveHistory">
+    UPDATE 
+        diagnosis_drive_history
+    SET 
+        last_diagnosis_history_no = #{lastDiagnosisHistoryNo},
+        upd_date = NOW()
+        <if test="succeeded == true">
+            , success_diagnosis_date = NOW()
+            , fail_diagnosis_date = null
+        </if>
+        <if test="succeeded == false">
+            , success_diagnosis_date = NULL
+            , fail_diagnosis_date = NOW()
+        </if>
+        <if test="finished == true">
+            , final_diagnosis_date = NOW()
+        </if>
+    WHERE drive_history_no = #{driveHistoryNo}
+  </update>
+  <!-- 진단 기준(diagnosis_criteria) 테이블 -->
+  <select id="findDiagnosisCriteriaByItemNo" flushCache="true" useCache="false" resultType="io.dymatics.cogny.domain.model.DiagnosisCriteria">
+    SELECT 
+        dc.*
+    FROM diagnosis_criteria dc
+        INNER JOIN diagnosis_item_criteria dic ON dic.diagnosis_criteria_no = dc.diagnosis_criteria_no AND dic.enabled = TRUE
+    WHERE dic.diagnosis_item_no = #{diagnosisItemNo}
+  </select>
+
+  <!-- 진단 이력 로그(insertDiagnosisLog)을 기록한다. -->
+  <insert id="insertDiagnosisLog" useGeneratedKeys="true" keyProperty="diagnosisLogNo" keyColumn="diagnosis_log_no">
+    INSERT INTO `diagnosis_log` 
+      (`diagnosis_history_no`, `vehicle_no`, `drive_history_no`, `sensing_raw_size`, 
+      `stable_sec_before`, `stable_sec_after`, `stable_idle_cnt`,
+      `o2_s2_sparse_time_lag`, `valid_coolant_temp`, `finished_drive`,
+      `diagnosis_item_no`, `diagnosis_code`, `diagnosis_result`,
+      `diagnosis_criteria_no`, `sensor_type`, `valid_cnt`, 
+      `spd_cutoff`, `spd_cnt_cutoff`, `spd_cnt`, 
+      `caution_cutoff`, `caution_cutoff_with_ac`, `caution_cnt`, `caution_cnt_cutoff`,
+      `fatal_cutoff`, `fatal_cutoff_with_ac`, `fatal_cnt`, `fatal_cnt_cutoff`,`reg_date`)
+    VALUES 
+    <foreach collection="diagnosisItemList" item="diagnosisItem" separator=",">
+      <if test="diagnosisItem.diagnosisCriteriaSize > 0">
+        <foreach collection="diagnosisItem.diagnosisCriteriaList" item="diagnosisCriteria" separator=",">
+          (#{diagnosisHistoryNo}, #{vehicleNo}, #{driveHistoryNo}, #{sensingRawSize},
+          #{stableSecBefore}, #{stableSecAfter}, #{stableIdleCnt},
+          #{o2S2SparseTimeLag}, #{validCoolantTemp}, #{finishedDrive},
+          #{diagnosisItem.diagnosisItemNo}, #{diagnosisItem.diagnosisCode}, #{diagnosisItem.diagnosisResult},
+          #{diagnosisCriteria.diagnosisCriteriaNo}, #{diagnosisCriteria.sensorType}, #{diagnosisCriteria.validCnt}, 
+          #{diagnosisCriteria.spdCutoff}, #{diagnosisCriteria.spdCntCutoff}, #{diagnosisCriteria.spdCnt},
+          #{diagnosisCriteria.cautionCutoff}, #{diagnosisCriteria.cautionCutoffWithAc}, #{diagnosisCriteria.cautionCnt}, #{diagnosisCriteria.cautionCntCutoff},
+          #{diagnosisCriteria.fatalCutoff}, #{diagnosisCriteria.fatalCutoffWithAc}, #{diagnosisCriteria.fatalCnt}, #{diagnosisCriteria.fatalCntCutoff}, NOW())
+        </foreach>
+      </if>
+      <if test="diagnosisItem.diagnosisCriteriaSize == 0">
+          (#{diagnosisHistoryNo}, #{vehicleNo}, #{driveHistoryNo}, #{sensingRawSize}, 
+          #{stableSecBefore}, #{stableSecAfter}, #{stableIdleCnt}, 
+          #{o2S2SparseTimeLag}, #{validCoolantTemp}, #{finishedDrive},
+          #{diagnosisItem.diagnosisItemNo}, #{diagnosisItem.diagnosisCode}, #{diagnosisItem.diagnosisResult},
+          NULL, NULL, NULL, 
+          NULL, NULL, NULL,
+          NULL, NULL, NULL, NULL,
+          NULL, NULL, NULL, NULL, NOW())
+
+      </if>
+    </foreach>
+  </insert>
+</mapper>

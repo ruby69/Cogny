@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/blue_grey_dark"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/spacing_1x"
+    android:paddingEnd="@dimen/spacing_quarter">
+
+    <ImageView
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:layout_marginTop="@dimen/spacing_1x"
+      android:layout_marginBottom="@dimen/spacing_1x"
+      android:src="@drawable/ic_car" />
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_1x"
+      android:gravity="center_vertical"
+      android:orientation="horizontal"
+      android:paddingEnd="@dimen/spacing_1x">
+
+      <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/label_common_regist_vehicle"
+          android:textAppearance="@style/TextAppearance.AppCompat.Title"
+          android:textColor="@android:color/white" />
+
+        <TextView
+          android:id="@+id/vehicleCount"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/spacing_1x"
+          android:textAppearance="@style/TextAppearance.AppCompat.Title"
+          android:textColor="@android:color/white"
+          android:textStyle="bold" />
+
+      </LinearLayout>
+
+      <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:orientation="vertical">
+
+        <TextView
+          android:id="@+id/companyName"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="end"
+          android:maxLines="2"
+          android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+          android:textColor="@android:color/white" />
+      </LinearLayout>
+    </LinearLayout>
+
+
+  </LinearLayout>
+</merge>

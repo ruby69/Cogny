@@ -1,0 +1,129 @@
+<resources>
+  <string name="app_name">COGNY Report</string>
+  <string name="tel_call_center" translatable="false">tel:025228426</string>
+  <string name="base_url_dev" translatable="false">http://172.18.1.33:8080/api/</string>
+
+  <string name="menu_user" translatable="false">내 정보</string>
+  <string name="menu_agreement" translatable="false">이용약관</string>
+  <string name="menu_privacy" translatable="false">개인정보취급방침</string>
+  <string name="menu_settings" translatable="false">설정</string>
+  <string name="menu_logout" translatable="false">로그아웃</string>
+
+  <string name="label_common_ok" translatable="false">OK</string>
+  <string name="label_common_yes" translatable="false">예</string>
+  <string name="label_common_no" translatable="false">아니오</string>
+  <string name="label_common_confirm" translatable="false">확인</string>
+  <string name="label_common_cancel" translatable="false">취소</string>
+  <string name="label_common_save" translatable="false">저장</string>
+  <string name="label_common_exit" translatable="false">종료</string>
+  <string name="label_common_preview" translatable="false">둘러보기</string>
+  <string name="label_common_call_to_driver" translatable="false">점검 안내하기</string>
+  <string name="label_common_regist_vehicle" translatable="false">등록 차량</string>
+  <string name="label_common_call_center" translatable="false">고객센터 문의하기</string>
+  <string name="label_common_finish" translatable="false">코그니 종료하기</string>
+  <string name="label_common_driving" translatable="false">운행 중</string>
+
+  <string name="label_common_email" translatable="false">이메일</string>
+  <string name="label_common_name" translatable="false">이름</string>
+  <string name="label_common_hp" translatable="false">전화번호</string>
+  <string name="label_common_partner" translatable="false">소속</string>
+  <string name="label_common_signedup" translatable="false">가입일</string>
+  <string name="label_common_version" translatable="false">앱버전</string>
+  <string name="label_common_version_latest" translatable="false">현재 최신버전입니다.</string>
+  <string name="label_common_update_need" translatable="false">지금 최신버전 업데이트</string>
+  <string name="label_common_update" translatable="false">업데이트</string>
+
+  <string name="label_permission_phone" translatable="false">기기정보 (필수)</string>
+  <string name="label_permission_grant" translatable="false">권한 동의하기</string>
+  <string name="label_permission_grant_set" translatable="false">권한설정</string>
+
+  <string name="label_sign_in" translatable="false">로그인</string>
+  <string name="label_sign_revoke_with_google" translatable="false">구글 연결해제</string>
+  <string name="label_sign_start_with_google" translatable="false">구글 계정으로 시작하기</string>
+  <string name="label_sign_start_cogny" translatable="false">코그니 사용하기</string>
+
+  <string name="label_agree" translatable="false">약관동의</string>
+  <string name="label_disagree" translatable="false">동의안함</string>
+
+  <string name="label_font_scale" translatable="false">글자 크기</string>
+  <array name="fontScales">
+    <item>가장 작게</item>
+    <item>작게</item>
+    <item>보통</item>
+    <item>크게</item>
+    <item>가장 크게</item>
+  </array>
+
+
+  <string name="label_status_vehicle" translatable="false">차량 현황</string>
+  <string name="label_status_show_histories" translatable="false">진단이력보기</string>
+
+  <string name="label_status_cate_engine" translatable="false">엔진계통</string>
+  <string name="label_status_cate_engine_ignite" translatable="false">점화계통</string>
+  <string name="label_status_cate_engine_fuel" translatable="false">연료계통</string>
+  <string name="label_status_cate_engine_machine" translatable="false">엔진기계</string>
+  <string name="label_status_cate_engine_control" translatable="false">엔진제어</string>
+  <string name="label_status_cate_parts" translatable="false">주행안전</string>
+  <string name="label_status_cate_parts_tire" translatable="false">타이어</string>
+  <string name="label_status_cate_parts_generator" translatable="false">발전기</string>
+  <string name="label_status_cate_parts_coolant" translatable="false">냉각수온</string>
+  <string name="label_status_dtc" translatable="false">고장진단코드</string>
+  <string name="label_status_repair_msg" translatable="false">점검 안내 메시지</string>
+
+  <string name="label_status_diagnosis_caution" translatable="false">점검 필요</string>
+  <string name="label_status_diagnosis_fatal" translatable="false">점검 필요</string>
+  <string name="label_status_diagnosis_not_available" translatable="false">미지원 차종</string>
+  <string name="label_status_diagnosis_empty" translatable="false">점검 항목 미검출</string>
+  <string name="label_status_diagnosis_normal" translatable="false">정상</string>
+
+
+
+
+
+  <string name="label_dtc_status" translatable="false">차량 진단 현황</string>
+  <string name="label_dtc_history" translatable="false">진단 이력</string>
+  <string name="label_dtc_repair_msg_none" translatable="false">안내 중인 메시지가 없습니다.</string>
+  <string name="label_dtc_repair_complete" translatable="false">점검완료</string>
+  <string name="label_dtc_none" translatable="false">고장진단코드가 조회되지 않았습니다.</string>
+  <string name="label_dtc_history_none" translatable="false">진단 이력이 없습니다.</string>
+
+  <string name="label_contact_options" translatable="false">보낼 메시지를 선택하고 통화버튼을 누르세요.</string>
+  <string name="label_contact_options_no_call" translatable="false">보낼 메시지를 선택하세요.</string>
+  <string name="label_contact_message_no_call" translatable="false">메시지만 보내기</string>
+  <string name="label_contact_message" translatable="false">메시지 보내기</string>
+  <string name="label_contact_call" translatable="false">통화</string>
+  <string name="label_contact_message_option0" translatable="false">메시지를 보내지 않습니다.</string>
+  <string name="label_contact_message_option1" translatable="false">운행 종료 후 간단한 점검이 필요합니다.</string>
+  <string name="label_contact_message_option2" translatable="false">점검을 위해 즉시 복귀하세요.</string>
+
+  <string name="message_common_db_fail" translatable="false">Ooooops!\nFailed DB Initialization.</string>
+  <string name="message_common_net_state_check" translatable="false">인터넷 연결을 확인해 주세요.</string>
+  <string name="message_common_wait" translatable="false">잠시만 기다려주세요.</string>
+  <string name="message_common_net_error" translatable="false">서버와의 연결상태가 원할하지 않습니다.</string>
+  <string name="message_common_no_invite" translatable="false">고객님의 가입 정보가 존재하지 않아 코그니를 사용할 수 없습니다.\n고객센터에 문의 하세요.</string>
+  <string name="message_common_call_center" translatable="false">tel. 02-xxx-xxxx\n(운영시간: 월~금, 09:00~18:00)</string>
+  <string name="message_common_font_size" translatable="false" formatted="true">글자 크기를 \'%1$s\' 크기로 변경하시겠습니까?</string>
+
+  <string name="message_permission_required" translatable="false">앱 사용을 위해\n필요한 접근 권한 동의를 해주세요.</string>
+  <string name="message_permission_phone" translatable="false">로그인, 기기식별을 위해 필요합니다.</string>
+  <string name="message_permissions_not_granted">앱을 이용하시려면 필수 접근권한을 허용해야 합니다.</string>
+  <string name="message_permission_granted" translatable="false">권한이 허락되었습니다. 계속 진행합니다.</string>
+
+  <string name="message_sign_in_fail" translatable="false">인증에 실패했습니다.\n사용자 정보를 확인해주세요.</string>
+  <string name="message_sign_in_fail_net_error" translatable="false">인증서버와의 연결상태가 원할하지 않습니다.\n잠시후 다시 사용해주세요.</string>
+
+  <string name="message_dtc_repair_complete" translatable="false">점검을 완료하고, 운전자에게 메시지 안내를 종료하시겠습니까?</string>
+  <string name="message_dtc_repair_complete_help" translatable="false">운전자에게 점검 메시지가 안내되고 있습니다. [점검완료]를 누르면 점검 메시지 안내가 종료됩니다.</string>
+  <string name="message_dtc_repair_complete_help2" translatable="false">[점검 안내하기]를 누르면 운전자에게 점검 메시지가 전송됩니다.</string>
+  <string name="message_call_to_user" translatable="false" formatted="true">[%1$s]님에게 전화통화를 합니다.</string>
+  <string name="message_push_to_user" translatable="false" formatted="true">[%1$s]님에게 안내 메시지를 보냅니다.</string>
+
+  <string name="url_store_app" formatted="true" translatable="false">market://details?id=%1$s</string>
+  <string name="url_store_web" formatted="true" translatable="false">http://play.google.com/store/apps/details?id=%1$s</string>
+
+  <string name="url_agreement" formatted="true" translatable="false">https://localhost/agreements/</string>
+  <string name="url_privacy" formatted="true" translatable="false">https://localhost/privacy-policy/</string>
+
+  <string name="db_name" translatable="false">COGNY_REPAIR</string>
+  <integer name="db_version">3</integer>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.dymatics.cogny.domain.persist.PerformHistoryRepository">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="performHistoryNo">
+    INSERT INTO `perform_history` (`title`,`body`,`vehicle_no`,`ref`,`ref_no`,`date_idx`,`issued_time`)
+    VALUES (#{title},#{body},#{vehicleNo},#{ref},#{refNo},
+    <if test="issuedTime != null">
+        DATE_FORMAT(#{issuedTime},'%Y%m%d'), #{issuedTime}
+    </if>
+    <if test="issuedTime == null">
+        DATE_FORMAT(NOW(),'%Y%m%d'), NULL
+    </if>
+    )
+  </insert>
+</mapper>

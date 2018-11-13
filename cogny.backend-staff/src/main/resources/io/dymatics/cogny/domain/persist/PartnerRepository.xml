@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dymatics.cogny.domain.persist.PartnerRepository">
+
+  <resultMap type="Partner" id="partnerResultMap">
+    <result property="postcode" column="postcode" />
+  </resultMap>
+
+  <!-- 제휴사 목록 조회 기본 쿼리 -->
+  <sql id="selectPartner">
+    SELECT
+      p.*,
+      (SELECT pc.postcode FROM postcode pc WHERE pc.postcode_no = p.postcode_no) AS postcode
+    FROM
+      `partner` p
+  </sql>
+
+  <!-- 파트너 리스트 조회 조건 쿼리 -->
+  <sql id="whereByPage">
+    WHERE p.`enabled` = true
+    <if test="@org.springframework.util.StringUtils@hasText(contractStatus)">
+        AND p.contract_status = #{contractStatus}
+    </if>
+    <if test="@org.springframework.util.StringUtils@hasText(query)" >
+      AND (
+        p.company_name LIKE CONCAT('%', #{query}, '%')
+        OR p.addr_post_code LIKE CONCAT('%', #{query}, '%')
+      )
+    </if>
+  </sql>
+
+  <!-- 개별 파트너 조회 -->
+  <select id="findByNo" resultMap="partnerResultMap">
+    <include refid="selectPartner" />
+    WHERE p.`partner_no` = #{partnerNo}
+  </select>
+
+  <!-- 파트너 리스트 레코드 수 -->
+  <select id="countByPage" resultType="Integer">
+    SELECT COUNT(1)
+    FROM `partner` p
+    <include refid="whereByPage" />
+  </select>
+
+  <!-- 파트너 리스트 조회 -->
+  <select id="findByPage" resultMap="partnerResultMap">
+    <include refid="selectPartner" />
+    <include refid="whereByPage" />
+    ORDER BY p.`partner_no` DESC
+    LIMIT #{beginIndex}, #{scale}
+  </select>
+
+  <!-- 파트너 정보 수정 -->
+  <update id="update">
+    UPDATE `partner`
+    SET
+      `company_name` = #{companyName},
+      `partner_type` = #{partnerType},
+      `tel` = #{tel},
+      `postcode_no` = #{postcodeNo},
+      `addr_post_code` = #{addrPostCode},
+      `addr_detail` = #{addrDetail},
+      `person_in_charge` = #{personInCharge},
+      `contract_status` = #{contractStatus},
+      `upd_date` = NOW()
+    WHERE `partner_no` = #{partnerNo}
+  </update>
+
+  <!-- 파트너 삭제 -->
+  <update id="delete">
+    UPDATE `partner`
+    SET 
+      `enabled` = false,
+      `del_date` = NOW()
+    WHERE
+      `partner_no` = #{partnerNo}
+  </update>
+</mapper>

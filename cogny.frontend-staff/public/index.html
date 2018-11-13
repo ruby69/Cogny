@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=11; IE=edge;" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-xxxx37-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-xxxx37-1');
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-auth.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "xxxxxxxxxx",
+        authDomain: "ProjectId.firebaseapp.com",
+        databaseURL: "https://ProjectId.firebaseio.com",
+        projectId: "ProjectId",
+        storageBucket: "ProjectId.appspot.com",
+        messagingSenderId: "xxxxxxxxxx"
+      }
+      firebase.initializeApp(config)
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/ui/3.4.1/firebase-ui-auth__ko.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/3.4.1/firebase-ui-auth.css" />  
+    
+    <link rel="shortcut icon" type="image/png" href="/images/logo-fav.png">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>COGNY</title>
+    <style type='text/css'>
+      body {
+        font-family: AppleSDGothicNeo-Regular,'Malgun Gothic','맑은 고딕',dotum,'돋움',sans-serif
+      }
+    </style>
+
+  </head>
+
+  <body class="be-animate">
+    <noscript>
+      <strong>We're sorry but cogny-staff doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+  </body>
+</html>

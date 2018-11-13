@@ -1,0 +1,107 @@
+{
+  "project_info": {
+    "project_number": "91700499438",
+    "firebase_url": "https://bluetire-182703.firebaseio.com",
+    "project_id": "bluetire-182703",
+    "storage_bucket": "bluetire-182703.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91700499438:android:f1c2038371fbb5be",
+        "android_client_info": {
+          "package_name": "io.dymatics.cogny"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91700499438-2bpb9gktr91rnceor69fq0iegl4jjmpg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.dymatics.cogny",
+            "certificate_hash": "c330adaed2bc6f4c32ee7c78f6a5fc36eab5b85b"
+          }
+        },
+        {
+          "client_id": "91700499438-tgknda5g33lnjnj1i6hopirrmrmc228f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.dymatics.cogny",
+            "certificate_hash": "660b8e119b0e6285168bb539d7ec968ca85f940c"
+          }
+        },
+        {
+          "client_id": "91700499438-thpam87k0u68eaq9c007ta5jofe6ok4j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2zvlqmmXrIGAVI4DboQBoMXJ4oKLwdX8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91700499438-thpam87k0u68eaq9c007ta5jofe6ok4j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91700499438:android:6480e6e6e4b7d0f5",
+        "android_client_info": {
+          "package_name": "io.dymatics.cognyreport"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91700499438-rj8k1a4393l93ahscgql7vkv23nufmmv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.dymatics.cognyreport",
+            "certificate_hash": "660b8e119b0e6285168bb539d7ec968ca85f940c"
+          }
+        },
+        {
+          "client_id": "91700499438-thpam87k0u68eaq9c007ta5jofe6ok4j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2zvlqmmXrIGAVI4DboQBoMXJ4oKLwdX8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91700499438-thpam87k0u68eaq9c007ta5jofe6ok4j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

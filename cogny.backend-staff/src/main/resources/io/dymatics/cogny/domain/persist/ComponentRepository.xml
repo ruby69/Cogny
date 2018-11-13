@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dymatics.cogny.domain.persist.ComponentRepository">
+  <resultMap type="io.dymatics.cogny.domain.model.Component" id="componentMap">
+    <result property="componentCate1.componentCate1No" column="component_cate1_no" />
+    <result property="componentCate1.name" column="cate1_name" />
+    <result property="componentCate2.componentCate2No" column="component_cate2_no" />
+    <result property="componentCate2.name" column="cate2_name" />
+   </resultMap>
+
+  <select id="findAllComponentCate1" resultType="io.dymatics.cogny.domain.model.Component$ComponentCate1">
+    SELECT 
+      component_cate1_no, name 
+    FROM 
+      component_cate1 
+    WHERE enabled=TRUE ;
+  </select>
+  <select id="findComponentCate2ListByCate1No" resultType="io.dymatics.cogny.domain.model.Component$ComponentCate2">
+    SELECT
+      c2.component_cate2_no,
+      c2.component_cate1_no,
+      c2.name
+    FROM component_cate2 c2
+    WHERE 
+        c2.component_cate1_no = #{componentCate1No}
+        AND c2.enabled = TRUE;
+  </select>
+  <select id="findComponentCateListByCate" resultMap="componentMap">
+    SELECT 
+      C.component_no,
+      C.manufacturer_no,
+      C.name,
+      CA.component_cate_no,
+      CA.component_cate1_no,
+      CA.component_cate2_no,
+      CA1.name AS cate1_name,
+      CA2.name AS cate2_name
+    FROM component C
+      INNER JOIN component_cate CA ON CA.component_no = C.component_no AND CA.enabled = TRUE
+      INNER JOIN component_cate1 CA1 ON CA.component_cate1_no = CA1.component_cate1_no AND CA1.enabled = TRUE
+      INNER JOIN component_cate2 CA2 ON CA.component_cate2_no = CA2.component_cate2_no AND CA2.enabled = TRUE
+    WHERE
+      C.enabled = TRUE
+      AND C.manufacturer_no = #{manufacturerNo}
+      AND CA.component_cate1_no = #{componentCate1No}
+      AND CA.component_cate2_no = #{componentCate2No};
+  </select>
+</mapper>

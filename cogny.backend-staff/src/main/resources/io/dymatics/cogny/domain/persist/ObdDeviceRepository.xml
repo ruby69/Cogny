@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dymatics.cogny.domain.persist.ObdDeviceRepository">
+
+  <resultMap type="ObdDevice" id="obdDeviceResultMap"> 
+    <result property="obdDeviceNo" column="obd_device_no" />
+    <result property="partnerNo" column="partner_no" />
+    <result property="partner.partnerNo" column="partner_no" />
+    <result property="partner.companyName" column="company_name" />
+    <result property="partner.partnerType" column="partner_type" />    
+    <association property="vehicle" column="{obdDeviceNo=obd_device_no}" select="io.dymatics.cogny.domain.persist.VehicleRepository.findByObdDevice" />
+  </resultMap>
+  
+  <insert id="insertList" useGeneratedKeys="true" keyProperty="obdDeviceNo">
+    INSERT INTO `obd_device` (`obd_serial`, `enabled`, `partner_no`, `reg_user_no`) VALUES
+    <foreach collection="obdDeviceList" item="obdDevice" separator=",">
+        ( #{obdDevice.obdSerial}, TRUE, #{partnerNo}, #{currentUser.userNo} )
+    </foreach>  
+  </insert>
+  <sql id="selectObdDevice">
+    SELECT 
+      od.`obd_device_no`, 
+      od.`obd_serial`,
+      od.`partner_no`,
+      CASE WHEN odv.obd_device_vehicle_no IS NULL THEN 'FREE' ELSE 'BUSY' END AS `status`,
+      od.`enabled`, 
+      od.`obd_serial_del`, 
+      od.`reg_date`, 
+      od.`upd_date`, 
+      od.`del_date`,
+      
+      p.company_name,
+      p.partner_type
+    FROM 
+        `obd_device` od 
+        LEFT JOIN partner p ON od.partner_no = p.partner_no AND p.enabled = TRUE
+        LEFT JOIN obd_device_vehicle odv ON od.obd_device_no = odv.obd_device_no AND odv.uninstall_date IS NULL 
+  </sql>
+  <select id="findByNo" resultMap="obdDeviceResultMap">
+    <include refid="selectObdDevice"/>
+    WHERE od.`obd_device_no` = #{obdDeviceNo}
+  </select>
+    
+  <select id="findAll" resultType="ObdDevice">
+    <include refid="selectObdDevice"/>
+    WHERE 
+        od.`enabled` = 1
+    ORDER BY od.obd_device_no DESC
+    ;
+  </select>
+  
+  <select id="findAllFree" resultType="ObdDevice">
+    <include refid="selectObdDevice"/>
+    WHERE 
+        od.`enabled` = 1 
+        AND odv.obd_device_vehicle_no IS NULL
+    ORDER BY od.obd_device_no DESC
+    ;
+  </select>
+    
+  <sql id="whereByPage">
+    WHERE
+        od.`enabled` = true
+        <if test="@org.springframework.util.StringUtils@hasText(query)" >
+        AND (
+            od.`obd_serial` LIKE CONCAT('%', #{query}, '%')
+        )
+        </if>
+<!--         <if test="currentUser != null and currentUser.role.name() != 'ADMIN'"> -->
+<!--         AND od.partner_no = #{currentUser.partnerNo} -->
+<!--         </if> -->
+        <if test="authorizedPartnerNo != null">
+        AND od.partner_no = #{authorizedPartnerNo}
+        </if>
+  </sql>
+  
+  <select id="countByPage" resultType="Integer">
+    SELECT COUNT(1) 
+    FROM `obd_device` od
+    <include refid="whereByPage"/>
+  </select>
+  
+  <select id="findByPage" resultMap="obdDeviceResultMap">
+    <include refid="selectObdDevice"/>
+    <include refid="whereByPage"/>
+    ORDER BY od.`obd_device_no` DESC
+    LIMIT #{beginIndex}, #{scale}
+  </select>
+
+  <select id="findByList" parameterType="list" resultType="ObdDevice">
+    <include refid="selectObdDevice"/>  
+    WHERE
+        od.obd_serial IN (
+        <foreach collection="obdDeviceList" item="obdDevice" index="index" separator=",">
+            #{obdDevice.obdSerial}
+        </foreach>
+        )
+        AND od.enabled = TRUE
+    ORDER BY od.`obd_device_no` DESC
+  </select>
+  <update id="update">
+    UPDATE `obd_device` 
+    SET 
+      `obd_serial` = #{obdSerial},
+      `partner_no` = #{partnerNo},
+      `upd_date` = NOW() 
+    WHERE 
+      `obd_device_no` = #{obdDeviceNo}
+  </update>
+  <update id="delete">
+  UPDATE 
+    `obd_device` od
+  SET 
+    od.obd_serial_del = od.obd_serial, 
+    od.obd_serial = NULL, 
+    od.`enabled` = FALSE, 
+    od.`del_date` = NOW() 
+  WHERE 
+    od.`obd_device_no` = #{obdDeviceNo}
+    <if test="currentUser != null and currentUser.role.name() != 'ADMIN'">
+    AND od.partner_no = #{currentUser.partnerNo}
+    </if>
+  </update>
+  <select id="findBusyByVehicle" resultType="ObdDevice">
+    SELECT 
+      od.`obd_device_no`,
+      od.`obd_serial`,
+      'BUSY' AS `status`,
+      odv.`obd_device_vehicle_no` as `obdDeviceVehicleNo`,
+      odv.`install_date` as `obdInstallDate`
+    FROM
+      `obd_device_vehicle` odv
+      INNER JOIN `obd_device` od ON od.`obd_device_no` = odv.`obd_device_no`
+    WHERE
+      odv.`vehicle_no` = #{vehicleNo}
+      AND odv.`uninstall_date` IS NULL
+  </select>
+</mapper>

@@ -1,0 +1,62 @@
+spring:
+  profiles.active: develop
+
+  datasource:
+    initialization-mode: never
+    hikari:
+      pool-name: hikariCp
+
+mybatis:
+  type-aliases-package: io.dymatics.cogny.domain.model
+  configuration:
+    map-underscore-to-camel-case: true
+
+server:
+  use-forward-headers: true
+  port: 80
+  servlet:
+    context-path: /
+
+logging:
+  level:
+    root: INFO
+    org.apache.tomcat: false
+    org.springframework: INFO
+
+
+---
+#####################################################################
+spring:
+  profiles: develop
+
+  datasource:
+    url: jdbc:mariadb://localhost:3306/cogny
+    username: root
+    password:
+
+logging:
+  level:
+    root: INFO
+    io.dymatics.cogny.domain.persist: DEBUG
+
+
+---
+#####################################################################
+spring:
+  profiles: test
+
+  datasource:
+    url: jdbc:mysql://10.0.0.1:3306/cogny_test
+    username: blue
+    password: 
+
+---
+#####################################################################
+spring:
+  profiles: product
+
+  datasource:
+    url: jdbc:mysql://10.0.0.2:3306/cogny_product
+    username: blue
+    password: 
+

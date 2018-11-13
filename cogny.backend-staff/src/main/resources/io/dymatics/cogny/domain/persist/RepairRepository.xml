@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.dymatics.cogny.domain.persist.RepairRepository">
+  <resultMap type="io.dymatics.cogny.domain.model.Repair" id="repairResultMap">
+    <result property="repairNo" column="repair_no"/>
+    <collection property="repairComponentList" column="{repairNo=repair_no}" select="findRepairComponentListByRepairNo" />
+  </resultMap>
+  <resultMap type="io.dymatics.cogny.domain.model.Repair$RepairComponent" id="repairComponentResultMap">
+    <result property="component.componentNo" column="component_no" />
+    <result property="component.manufacturerNo" column="manufacturer_no" />
+    <result property="component.name" column="component_name" />
+    <result property="component.componentCateNo" column="component_cate_no" />
+    <result property="component.componentCate1.componentCate1No" column="component_cate1_no" />
+    <result property="component.componentCate1.name" column="component_cate1_name" />
+    <result property="component.componentCate2.componentCate2No" column="component_cate2_no" />
+    <result property="component.componentCate2.name" column="component_cate2_name" />
+    <result property="componentCate1.componentCate1No" column="component_cate1_no" />
+    <result property="componentCate1.name" column="component_cate1_name" />
+    <result property="componentCate2.componentCate1No" column="component_cate1_no" />
+    <result property="componentCate2.componentCate2No" column="component_cate2_no" />
+    <result property="componentCate2.name" column="component_cate2_name" />
+  </resultMap>
+  <insert id="insertRepair" useGeneratedKeys="true" keyProperty="repairNo">
+    INSERT INTO `repair` (`vehicle_no`, `repair_shop_no`, `odometer`, `repair_date`, `memo`, `enabled`)
+    VALUES (#{vehicleNo}, #{repairShopNo}, #{odometer}, #{repairDate}, #{memo}, TRUE);
+  </insert>
+  <insert id="insertRepairComponentList" useGeneratedKeys="true" keyProperty="repairComponentNo">
+    INSERT INTO `repair_component` 
+      (
+        `repair_no`,
+        `component_cate_no`,
+        `category`,
+        `cost`,
+        `memo`,
+        `enabled`
+      )
+      VALUES
+      <foreach collection="repairComponentList" item="repairComponent"  separator=",">
+        (
+          #{repairNo}, 
+          #{repairComponent.componentCateNo},
+          #{repairComponent.category},
+          #{repairComponent.cost},
+          #{repairComponent.memo},
+          TRUE
+         )
+      </foreach>
+  </insert>
+  <insert id="insertRepairComponent" useGeneratedKeys="true" keyProperty="repairComponentNo">
+    INSERT INTO repair_component (`repair_no`, `component_cate_no`, `category`, `cost`, `memo`, `enabled`)
+    VALUES (#{repairNo}, #{componentCateNo}, #{category}, #{cost}, #{memo}, TRUE);
+  </insert>
+  <select id="findByNo" resultMap="repairResultMap">
+    SELECT
+      *
+    FROM 
+      `repair`
+    WHERE enabled = TRUE
+        AND repair_no = #{repairNo};
+  </select>
+  <sql id="fromWhereRepairListByPage">
+    FROM
+      `repair`
+    WHERE 
+        enabled = TRUE
+        AND vehicle_no = #{vehicleNo}
+    <if test="@org.springframework.util.StringUtils@hasText(query)">
+      AND (
+        `memo` LIKE CONCAT('%', #{query}, '%')
+      )
+    </if>
+  </sql>
+  <select id="countRepairListByPage" resultType="Integer">
+    SELECT
+        COUNT(1)
+    <include refid="fromWhereRepairListByPage" />
+  </select>
+  <select id="findRepairListByPage" resultMap="repairResultMap">
+    SELECT  
+      *
+    <include refid="fromWhereRepairListByPage" />
+    ORDER BY repair_no DESC
+    LIMIT #{beginIndex}, #{scale}
+  </select>
+  <select id="findRepairComponentListByRepairNo" resultMap="repairComponentResultMap">
+    SELECT
+      RC.*,
+      
+      CC1.component_cate1_no,
+      CC1.name AS component_cate1_name,
+      CC2.component_cate2_no,
+      CC2.name AS component_cate2_name,
+      C.component_no,
+      C.manufacturer_no,
+      C.name AS component_name
+    FROM
+      `repair_component` RC
+      INNER JOIN component_cate CC ON CC.component_cate_no = RC.component_cate_no
+      INNER JOIN component C ON C.component_no = CC.component_no
+      INNER JOIN component_cate2 CC2 ON CC.component_cate2_no = CC2.component_cate2_no
+      INNER JOIN component_cate1 CC1 ON CC.component_cate1_no = CC1.component_cate1_no
+    WHERE
+      RC.enabled = TRUE
+      AND RC.repair_no = #{repairNo}
+    ORDER BY RC.repair_component_no DESC
+    ;
+  </select>
+  <update id="updateRepair">
+    UPDATE 
+      repair
+    SET
+      vehicle_no = #{vehicleNo},
+      repair_shop_no = #{repairShopNo},
+      odometer = #{odometer},
+      repair_date = #{repairDate},
+      memo = #{memo},
+      upd_date = NOW()
+    WHERE
+      repair_no = #{repairNo};
+  </update>
+  <update id="updateRepairComponent">
+    UPDATE
+      repair_component
+    SET
+      component_cate_no = #{componentCateNo},
+      category = #{category},
+      cost = #{cost},
+      memo = #{memo},
+      upd_date = NOW()
+    WHERE
+      repair_component_no = #{repairComponentNo};
+  </update>
+  <update id="deleteRepair">
+    UPDATE
+      repair
+    SET
+      enabled = FALSE,
+      del_date = NOW()
+    WHERE
+      repair_no = #{repairNo}
+  </update>
+  <sql id="deleteRepairComponentSql">
+    UPDATE
+      repair_component
+    SET
+      enabled = FALSE,
+      del_date = NOW()
+    WHERE
+  </sql>
+  <update id="deleteRepairComponentByRepairNo">
+    <include refid="deleteRepairComponentSql" />
+      repair_no = #{repairNo};
+  </update>  
+  <update id="deleteRepairComponent">
+    <include refid="deleteRepairComponentSql" />
+      repair_component_no = #{repairComponentNo};
+  </update>
+</mapper>

@@ -1,0 +1,20 @@
+indexes:
+- kind: sensing_raw_dev
+  properties:
+  - name: drive_history_no
+    direction: desc
+  - name: sensing_time
+    direction: desc
+- kind: sensing_raw_test
+  properties:
+  - name: drive_history_no
+    direction: desc
+  - name: sensing_time
+    direction: desc
+- kind: sensing_raw_product
+  properties:
+  - name: drive_history_no
+    direction: desc
+  - name: sensing_time
+    direction: desc
+    

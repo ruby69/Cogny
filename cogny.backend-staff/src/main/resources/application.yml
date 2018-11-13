@@ -1,0 +1,115 @@
+spring:
+  profiles.active: develop
+
+  datasource:
+    initialization-mode: never
+    hikari:
+      pool-name: hikariCp
+
+mybatis:
+  type-aliases-package: io.dymatics.cogny.domain.model
+  configuration:
+    map-underscore-to-camel-case: true
+
+server:
+  use-forward-headers: true
+  port: 8080
+  servlet:
+    context-path: /api
+  tomcat:
+    uri-encoding: UTF-8
+  compression:
+    enabled: true
+    min-response-size: 8192
+    mime-types:
+      - application/json
+
+logging:
+  level:
+    root: INFO
+    org.apache.tomcat: false
+    org.springframework: INFO
+    org.springframework.security: INFO
+    io.dymatics.cogny.staff: INFO
+    io.dymatics.cogny.domain.persist: INFO
+
+security:
+  logout:
+    success-url: https://localhost:8080/api/auth/unauthenticated
+
+external:
+  invite:
+    url: https://localhost:8070/
+  sms:
+    key: zzzzzzzzzz
+    url : https://directsend.co.kr/index.php/api/v1/sms
+
+datastore:
+  kind-key: sensing_raw_dev
+  
+---
+#####################################################################
+spring:
+  profiles: develop
+
+  datasource:
+    initialization-mode: never
+    url: jdbc:mariadb://localhost:3306/cogny_local
+    username: root
+    password: 
+
+logging:
+  level:
+    root: INFO
+#    org.springframework.security: DEBUG
+#    io.dymatics.cogny.staff: DEBUG
+#    io.dymatics.cogny.domain.model: DEBUG
+#    io.dymatics.cogny.domain.persist: DEBUG
+
+security:
+  logout:
+    success-url: /auth/unauthenticated
+
+---
+#####################################################################
+spring:
+  profiles: test
+
+  datasource:
+    url: jdbc:mysql://10.0.0.1:3306/cogny_test
+    username: blue
+    password: 
+
+logging:
+  level:
+    root: INFO
+    io.dymatics.cogny.domain.persist: INFO
+
+security:
+  logout:
+    success-url: http://localhost:8080/api/auth/unauthenticated
+
+datastore:
+  kind-key: sensing_raw_test
+
+---
+#####################################################################
+spring:
+  profiles: product
+
+  datasource:
+    url: jdbc:mysql://10.0.144.3:3306/cogny_product
+    username: blue
+    password: xkdldj12#$
+
+logging:
+  level:
+    root: INFO
+    io.dymatics.cogny.domain.persist: INFO
+    
+external:
+  invite:
+    url: https://localhost:8070/
+    
+datastore:
+  kind-key: sensing_raw_product

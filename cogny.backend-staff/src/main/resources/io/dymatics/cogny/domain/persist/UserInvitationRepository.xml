@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.dymatics.cogny.domain.persist.UserInvitationRepository">
+  <resultMap type="io.dymatics.cogny.domain.model.UserInvitation" id="userInvitationMap">
+    <result property="userNo" column="user_no"/>
+    <result property="signUpUser.userNo" column="user_no"/>
+    <result property="signUpUser.name" column="sign_up_user_name"/>
+    <result property="signUpUser.email" column="sign_up_user_email"/>
+    <result property="partnerNo" column="partner_no"/>
+    <result property="partner.partnerNo" column="partner_no"/>
+    <result property="partner.companyName" column="company_name"/>
+    <result property="partner.partnerType" column="partner_type"/>
+    <result property="regUserNo" column="reg_user_no"/>
+    <result property="regUser.userNo" column="reg_user_no"/>
+    <result property="regUser.name" column="reg_user_name"/>
+    <result property="regUser.email" column="reg_user_email"/>
+  </resultMap>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="userInvitationNo">
+    INSERT INTO `user_invitation` (`name`, `hp_no`, `partner_no`, `role`, `enabled`, `reg_user_no`)
+    VALUES (#{name}, #{hpNo}, #{partnerNo}, #{role}, TRUE, #{regUserNo})
+  </insert>
+  <insert id="insertList" useGeneratedKeys="true" keyProperty="userInvitationNo">
+    INSERT INTO `user_invitation` (
+        `name`, 
+        `hp_no`, 
+        `partner_no`, 
+        `role`, 
+        `enabled`, 
+        `reg_user_no`
+      )
+    VALUES
+    <foreach collection="userInvitationList" item="userInvitation"  separator=",">
+      (
+        #{userInvitation.name},
+        #{userInvitation.hpNo}, 
+        #{partnerNo}, 
+        #{role}, 
+        TRUE, 
+        #{regUserNo}
+      )
+    </foreach>
+  </insert>
+  <sql id="select">
+    SELECT 
+      ui.*,
+      u.name AS sign_up_user_name,
+      u.email AS sign_up_user_email,
+      ru.name AS reg_user_name,
+      ru.email AS reg_user_email,
+      p.company_name,
+      p.partner_type  
+  </sql>
+  <sql id="from">
+    FROM user_invitation ui
+      INNER JOIN `user` ru ON ui.reg_user_no = ru.user_no
+      LEFT JOIN `user` u ON ui.user_no = u.user_no
+      LEFT JOIN partner p ON ui.partner_no = p.partner_no
+  </sql>
+  <sql id="whereByPage">
+    WHERE ui.enabled = TRUE
+      <if test="authorizedPartnerNo != null">
+      AND ui.partner_no = #{authorizedPartnerNo}
+      </if>
+      <if test="@org.springframework.util.StringUtils@hasText(query)">
+        AND (
+          ui.`name` LIKE CONCAT('%', #{query}, '%')
+          OR ui.`hp_no` LIKE CONCAT('%', #{query}, '%')
+        )
+      </if>
+  </sql>
+  <select id="findByNo" resultMap="userInvitationMap">
+    <include refid="select" />
+    <include refid="from" />
+    WHERE ui.enabled = TRUE 
+      AND ui.user_invitation_no = #{userInvitationNo}
+  </select>  
+  <select id="countByPage" resultType="Integer">
+    SELECT
+      COUNT(1)
+    <include refid="from" />
+    <include refid="whereByPage" />
+  </select>
+  <select id="findByPage" resultMap="userInvitationMap">
+    <include refid="select" />
+    <include refid="from" />
+    <include refid="whereByPage" />
+    ORDER BY ui.user_invitation_no DESC
+    LIMIT #{beginIndex}, #{scale}
+  </select>
+  <select id="findByCode" resultMap="userInvitationMap">
+    <include refid="select" />
+    <include refid="from" />
+    WHERE ui.enabled = TRUE
+      AND ui.invitation_code = #{invitationCode}
+      AND signup_date IS NULL
+  </select>
+  <update id="updateInvitationCode">
+    UPDATE
+      user_invitation
+    SET
+      invitation_code = #{invitationCode}
+    WHERE
+      user_invitation_no = #{userInvitationNo}
+  </update>
+  <update id="updateSmsResult">
+    UPDATE
+      user_invitation
+    SET
+      sms_response = #{smsResponse},
+      sms_status = #{smsStatus}
+    WHERE
+      user_invitation_no = #{userInvitationNo}
+  </update>
+  <update id="updateUserNo">
+    UPDATE
+      user_invitation
+    SET
+      user_no = #{userNo},
+      signup_date = NOW()
+    WHERE
+      user_invitation_no = #{userInvitationNo}
+  </update>
+  <update id="delete">
+    UPDATE
+      user_invitation
+    SET
+      enabled = FALSE,
+      del_date = NOW()
+    WHERE
+      user_invitation_no = #{userInvitationNo}
+  </update>
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="nav_header_height">160dp</dimen>
+
+  <dimen name="button_corner_radius">4dp</dimen>
+  <dimen name="card_radius">12dp</dimen>
+
+  <dimen name="spacing_quarter">2dp</dimen>
+  <dimen name="spacing_half">4dp</dimen>
+  <dimen name="spacing_1x">8dp</dimen>
+  <dimen name="spacing_2x">16dp</dimen>
+  <dimen name="spacing_3x">24dp</dimen>
+  <dimen name="spacing_4x">32dp</dimen>
+  <dimen name="spacing_5x">40dp</dimen>
+  <dimen name="spacing_6x">48dp</dimen>
+  <dimen name="spacing_7x">56dp</dimen>
+  <dimen name="spacing_8x">64dp</dimen>
+  <dimen name="spacing_9x">72dp</dimen>
+  <dimen name="spacing_10x">80dp</dimen>
+  <dimen name="spacing_11x">88dp</dimen>
+  <dimen name="spacing_12x">96dp</dimen>
+  <dimen name="spacing_13x">104dp</dimen>
+  <dimen name="spacing_14x">112dp</dimen>
+  <dimen name="spacing_15x">120dp</dimen>
+  <dimen name="spacing_16x">128dp</dimen>
+  <dimen name="spacing_17x">136dp</dimen>
+  <dimen name="spacing_18x">144dp</dimen>
+  <dimen name="spacing_19x">152dp</dimen>
+  <dimen name="spacing_20x">160dp</dimen>
+</resources>

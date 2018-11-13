@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dymatics.cogny.domain.persist.DriveRepairLogRepository">
+
+  <insert id="insert" >
+    INSERT INTO `drive_repair_log` (
+      `vehicle_no`,
+      `drive_time`,
+      `drive_mileage`,
+      `total_mileage`,
+      `ref`,
+      `ref_no`,
+      `date_idx`
+    ) VALUES (
+      #{vehicleNo},
+      #{driveTime},
+      #{driveMileage},
+      #{totalMileage},
+      #{ref},
+      #{refNo},
+      <if test="dateIdx lt 1">DATE_FORMAT(CURDATE(),'%Y%m%d')</if>
+      <if test="dateIdx gt 0">#{dateIdx}</if>
+    )
+  </insert>
+
+</mapper>

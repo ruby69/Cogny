@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dymatics.cogny.domain.persist.SensingRawRepository">
+  <resultMap type="SensingRaw" id="sensingRawResultMap"></resultMap>
+
+  <sql id="sensingRawFromWhere">
+    FROM sensing_raw
+    WHERE 
+      vehicle_no = #{vehicleNo}
+      AND drive_history_no = #{driveHistoryNo}
+  </sql>
+  <select id="countByPage" resultType="Integer">
+    SELECT
+      COUNT(1)
+      <include refid="sensingRawFromWhere" />
+  </select>
+  <select id="findByPage" resultMap="sensingRawResultMap">
+    SELECT 
+      <foreach collection="columnList" item="column" index="index" separator=",">
+      ${column}
+      </foreach>
+    <include refid="sensingRawFromWhere" />
+    ORDER BY sensing_time, sensing_raw_no
+    LIMIT #{page.beginIndex}, #{page.scale}
+  </select>
+  <select id="findAllByDriveHistory" resultMap="sensingRawResultMap">
+    SELECT *
+    <include refid="sensingRawFromWhere" />
+    ORDER BY sensing_time, sensing_raw_no
+  </select>
+</mapper>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.dymatics.cogny.domain.persist.UserRepository">
+
+  <resultMap type="User" id="userResultMap">
+    <result property="partnerNo" column="partner_no" />
+    <result property="partner.partnerNo" column="partner_no" />
+    <result property="partner.companyName" column="company_name" />
+  </resultMap>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="userNo" keyColumn="user_no">
+  INSERT INTO `user` (`partner_no`, `uuid`, `sign_provider`, `email`, `name`, `tel`, `hp_no`, `role`, `user_status`) 
+  VALUES (#{partnerNo}, #{uuid}, #{signProvider}, #{email}, #{name}, #{tel}, #{hpNo}, #{role}, #{userStatus})
+  </insert>
+  <!-- 사용자 목록 조회 기본 쿼리 -->
+  <sql id="selectUser">
+    SELECT
+      u.*,
+      p.`company_name`
+  </sql>
+
+  <!-- 파트너 리스트 조회 조건 쿼리 -->
+  <sql id="joinUser">
+    FROM
+      `user` u
+      LEFT JOIN `partner` p ON u.`partner_no` = p.`partner_no` AND p.enabled = TRUE
+  </sql>
+
+  <!-- 파트너 리스트 조회 조건 쿼리 -->
+  <sql id="whereByPage">
+    WHERE u.`user_status` = 'MEMBER'
+    <if test="@org.springframework.util.StringUtils@hasText(query)" >
+      AND (
+        u.`name` LIKE CONCAT('%', #{query}, '%')
+        OR u.`hp_no` LIKE CONCAT('%', #{query}, '%')
+        OR u.`email` LIKE CONCAT('%', #{query}, '%')
+        OR p.`company_name` LIKE CONCAT('%', #{query}, '%')
+      )
+    </if>
+    <if test="authorizedPartnerNo != null">
+      AND u.partner_no = #{authorizedPartnerNo}
+    </if>
+  </sql>
+
+  <!-- 개별 사용자 조회 -->
+  <select id="findByNo" resultMap="userResultMap">
+    <include refid="selectUser" />
+    <include refid="joinUser" />
+    WHERE u.`user_no` = #{userNo}
+  </select>
+  
+  <!-- 개별 사용자 조회 -->
+  <select id="findByUid" resultMap="userResultMap">
+    <include refid="selectUser" />
+    <include refid="joinUser" />
+    WHERE 
+        u.`uuid` = #{uuid}
+        AND u.user_status = 'MEMBER'
+  </select>
+  
+  <!-- 아이디 중복 확인 -->
+
+  <!-- 사용자 리스트 레코드 수 -->
+  <select id="countByPage" resultType="Integer">
+    SELECT COUNT(1)
+    <include refid="joinUser" />
+    <include refid="whereByPage" />
+  </select>
+
+  <!-- 사용자 리스트 조회 -->
+  <select id="findByPage" resultMap="userResultMap">
+    <include refid="selectUser" />
+    <include refid="joinUser" />
+    <include refid="whereByPage" />
+    ORDER BY u.`user_no` DESC
+    LIMIT #{beginIndex}, #{scale}
+  </select>
+
+  <!-- 사용자 정보 수정 -->
+  <update id="update">
+    UPDATE `user`
+    SET
+      `partner_no` = #{partnerNo},
+      `email` = #{email},
+      `name` = #{name},
+      `hp_no` = #{hpNo},
+<!--       `role` = #{role}, -->
+      `user_status` = #{userStatus},
+      `upd_date` = NOW()
+    WHERE `user_no` = #{userNo}
+  </update>
+
+  <!-- 사용자 삭제 -->
+  <update id="delete">
+    UPDATE `user`
+    SET
+      `user_status` = 'QUIT',
+      `del_date` = NOW()
+    WHERE
+      `user_no` = #{userNo};
+  </update>
+</mapper>

@@ -1,0 +1,146 @@
+<resources>
+  <string name="app_name" translatable="false">COGNY Taxi</string>
+  <string name="google_maps_key" translatable="false">xxxx</string>
+  <string name="base_url_dev" translatable="false">http://localhost:8080/api/</string>
+  <string name="tel_call_center" translatable="false">tel:02xxxxxxx</string>
+
+  <string name="menu_user" translatable="false">내 정보</string>
+  <string name="menu_agreement" translatable="false">이용약관</string>
+  <string name="menu_privacy" translatable="false">개인정보취급방침</string>
+  <string name="menu_settings" translatable="false">설정</string>
+  <string name="menu_font_size" translatable="false">글자 크기</string>
+
+  <string name="menu_vehicle" translatable="false">차량정보</string>
+  <string name="menu_version" translatable="false">버전정보</string>
+  <string name="menu_logout" translatable="false">로그아웃</string>
+
+  <string name="label_common_ok" translatable="false">OK</string>
+  <string name="label_common_yes" translatable="false">예</string>
+  <string name="label_common_no" translatable="false">아니오</string>
+  <string name="label_common_nocheck" translatable="false">다시물어보지 않음</string>
+  <string name="label_common_confirm" translatable="false">확인</string>
+  <string name="label_common_cancel" translatable="false">취소</string>
+  <string name="label_common_save" translatable="false">저장</string>
+  <string name="label_common_exit" translatable="false">종료</string>
+  <string name="label_common_preview" translatable="false">둘러보기</string>
+  <string name="label_common_call_center" translatable="false">고객센터 문의하기</string>
+  <string name="label_common_finish" translatable="false">코그니 종료하기</string>
+  <string name="label_common_more" translatable="false">MORE</string>
+  <string name="label_common_update" translatable="false">업데이트</string>
+
+  <string name="label_common_email" translatable="false">이메일</string>
+  <string name="label_common_name" translatable="false">이름</string>
+  <string name="label_common_hp" translatable="false">전화번호</string>
+  <string name="label_common_partner" translatable="false">소속</string>
+  <string name="label_common_signedup" translatable="false">가입일</string>
+  <string name="label_common_version" translatable="false">앱버전</string>
+  <string name="label_common_version_latest" translatable="false">현재 최신버전입니다.</string>
+  <string name="label_common_update_need" translatable="false">지금 최신버전 업데이트</string>
+
+  <string name="label_font_scale" translatable="false">글자 크기</string>
+  <array name="fontScales">
+    <item>가장 작게</item>
+    <item>작게</item>
+    <item>보통</item>
+    <item>크게</item>
+    <item>가장 크게</item>
+  </array>
+
+  <string name="label_noti_common_channel_id" translatable="false">COGNY_COMMON_NOTI</string>
+  <string name="label_noti_common_channel_name" translatable="false">COGNY Notification Channel</string>
+  <string name="label_noti_disconnected" translatable="false">OBD 연결대기 중입니다.</string>
+  <string name="label_noti_connected" translatable="false">OBD 통신 중입니다.</string>
+  <string name="label_noti_launch" translatable="false">COGNY 상태를 보려면 누르세요.</string>
+  <string name="label_noti_update_channel_id" translatable="false">COGNY_UPDATE_NOTI</string>
+  <string name="label_noti_update_channel_name" translatable="false">COGNY Update Notification Channel</string>
+  <string name="label_noti_update" translatable="false">COGNY 차량진단을 위해 업데이트가 필요합니다.</string>
+  <string name="label_noti_update_run" translatable="false">업데이트 하려면 누르세요.</string>
+
+  <string name="label_permission_phone" translatable="false">통화상태 (필수)</string>
+  <string name="label_permission_location" translatable="false">위치 (필수)</string>
+  <string name="label_permission_grant" translatable="false">권한 동의하기</string>
+  <string name="label_permission_grant_set" translatable="false">권한설정</string>
+
+  <string name="label_sign_in" translatable="false">로그인</string>
+  <string name="label_agree" translatable="false">약관동의</string>
+  <string name="label_disagree" translatable="false">동의안함</string>
+
+  <string name="label_sign_revoke_with_google" translatable="false">구글 연결해제</string>
+  <string name="label_sign_start_with_google" translatable="false">구글 계정으로 시작하기</string>
+  <string name="label_sign_start_cogny" translatable="false">코그니 사용하기</string>
+
+  <string name="label_obd_connect_menu" translatable="false">OBD 연결</string>
+  <string name="label_obd_disconnect_menu" translatable="false">OBD 연결해제</string>
+  <string name="label_obd_invalid" translatable="false">OBD 단말기 설정 오류</string>
+  <string name="label_obd_not_found" translatable="false">OBD 연결 실패</string>
+  <string name="label_bt_required" translatable="false">블루투스를 활성화 하세요</string>
+
+  <string name="label_drive_latest" translatable="false">최근 운행</string>
+  <string name="label_drive_ing" translatable="false">운행 중</string>
+  <string name="label_drive_time" translatable="false">주행시간</string>
+  <string name="label_drive_distance" translatable="false">주행거리</string>
+  <string name="label_drive_none" translatable="false">OBD를 연결하면 운행정보를 확인할 수 있습니다.</string>
+  <string name="label_drive_none1" translatable="false">차량 운행 이력이 없습니다.</string>
+  <string name="label_drive_history" translatable="false">차량 점검 이력</string>
+  <string name="label_drive_history_empty" translatable="false">OBD를 연결하면 차량 점검 이력을 확인할 수 있습니다.</string>
+  <string name="label_drive_history_empty1" translatable="false">차량 점검 이력이 없습니다.</string>
+
+
+  <string name="message_common_db_fail" translatable="false">Ooooops!\nFailed DB Initialization.</string>
+  <string name="message_common_net_state_check" translatable="false">인터넷 연결을 확인해 주세요.</string>
+  <string name="message_common_wait" translatable="false">잠시만 기다려주세요.</string>
+  <string name="message_common_net_error" translatable="false">서버와의 연결상태가 원할하지 않습니다.</string>
+  <string name="message_common_progress_update" translatable="false">updating</string>
+  <string name="message_common_progress_backup" translatable="false">doing backup</string>
+  <string name="message_common_progress_restore" translatable="false">restoring</string>
+  <string name="message_common_no_invite" translatable="false">고객님의 가입 정보가 존재하지 않아 코그니를 사용할 수 없습니다.\n고객센터에 문의 하세요.</string>
+  <string name="message_common_call_center" translatable="false">tel. 02-522-8426\n(운영시간: 월~금, 09:00~18:00)</string>
+  <string name="message_common_font_size" translatable="false" formatted="true">글자 크기를 \'%1$s\' 크기로 변경하시겠습니까?</string>
+
+  <string name="message_permission_required" translatable="false">코그니 앱 사용을 위해\n필요한 접근 권한 동의를 해주세요.</string>
+  <string name="message_permission_phone" translatable="false">로그인, 기기식별, 센서 데이터 전송을 위해 필요합니다.</string>
+  <string name="message_permission_location" translatable="false">BLE 접속, 주행이력 관리를 위해 필요합니다.</string>
+  <string name="message_permissions_not_granted">코그니를 이용하시려면 필수 접근권한을 허용해야 합니다. (통화, 위치)</string>
+  <string name="message_permission_granted" translatable="false">권한이 허락되었습니다. 계속 진행합니다.</string>
+
+  <string name="message_sign_in_fail" translatable="false">인증에 실패했습니다.\n사용자 정보를 확인해주세요.</string>
+  <string name="message_sign_in_fail_net_error" translatable="false">인증서버와의 연결상태가 원할하지 않습니다.\n잠시후 다시 사용해주세요.</string>
+
+  <string name="message_bt_not_supported" translatable="false">블루투스를 지원하지 않습니다.</string>
+  <string name="message_bt_required" translatable="false">OBD 단말기 연결에 필요한 블루투스가 활성화 되어있지 않습니다.\n\n블루투스를 활성화 하고 OBD 단말기를 연결하시겠습니까?</string>
+  <string name="message_bt_ble_required" translatable="false">코그니는 블루투스 LE를 지원하는 스마트폰에서만 사용가능합니다.\n\n현재 코그니가 설치된 스마트폰은 블루투스 LE를 지원하지 않아 코그니를 정상적으로 사용하지 못합니다.</string>
+
+  <string name="message_obd_invalid" translatable="false">유효하지 않은 OBD 단말기가 연결 되었습니다.\n담당자에게 문의하세요.</string>
+  <string name="message_obd_not_found" translatable="false">OBD 연결에 실패했습니다.</string>
+  <string name="message_obd_fota" translatable="false">OBD 업데이트 중 입니다.\n잠시만 기다려주세요.\n이 작업은 3~5분정도 소요됩니다.</string>
+  <string name="message_obd_fota_fin" translatable="false">OBD 업데이트가 완료되었습니다.</string>
+  <string name="message_vehicle_empty" translatable="false">등록된 차량이 없습니다.\n담당자에게 문의하세요.</string>
+
+  <string name="message_drive_history_help" translatable="false">코그니는 엔진의 주요 부위를 점검합니다.\n\n소모품, 프레임 등의 점검은 정비 담당자에게 문의 하세요.</string>
+  <string name="message_diagnosis_msg1" translatable="false">차량 점검이 완료되었습니다.</string>
+  <string name="message_diagnosis_msg2" translatable="false">차량 점검이 필요합니다.</string>
+  <string name="message_diagnosis_msg3" translatable="false">점검 항목이 없습니다.</string>
+
+  <string name="format_model_title" formatted="true" translatable="false">%1$s(%2$d)</string>
+  <string name="format_model_title2" formatted="true" translatable="false">%1$s %2$s</string>
+  <string name="url_store_app" formatted="true" translatable="false">market://details?id=%1$s</string>
+  <string name="url_store_web" formatted="true" translatable="false">http://play.google.com/store/apps/details?id=%1$s</string>
+
+  <string name="url_agreement" formatted="true" translatable="false">https://localhost/agreements/</string>
+  <string name="url_privacy" formatted="true" translatable="false">https://localhost/privacy-policy/</string>
+
+  <string name="db_name" translatable="false">COGNY</string>
+  <integer name="db_version">4</integer>
+  <string name="sql_backup_user_insert" translatable="false">INSERT INTO UserInsert (userNo, partnerNo, partnerName, signProvider, email, name, hpNo, regDate) SELECT userNo, partnerNo, partnerName, signProvider, email, name, hpNo, regDate FROM User</string>
+  <string name="sql_backup_user_mobile_device_insert" translatable="false">INSERT INTO UserMobileDeviceInsert (userMobileDeviceNo, mobileDeviceNo, mobileNumber) SELECT userMobileDeviceNo, mobileDeviceNo, mobileNumber FROM UserMobileDevice</string>
+  <string name="sql_backup_obd_device_insert" translatable="false">INSERT INTO ObdDeviceInsert (obdDeviceNo, obdSerial, regDate) SELECT obdDeviceNo, obdSerial, regDate FROM ObdDevice</string>
+  <string name="sql_backup_vehicle_insert" translatable="false">INSERT INTO VehicleInsert (vehicleNo, modelNo, fuelNo, licenseNo, modelYear, modelMonth, regDate, modelName, fuelName, manufacturerNo, manufacturerName) SELECT vehicleNo, modelNo, fuelNo, licenseNo, modelYear, modelMonth, regDate, modelName, fuelName, manufacturerNo, manufacturerName FROM Vehicle</string>
+  <string name="sql_backup_drive_history_insert" translatable="false">INSERT INTO DriveHistoryInsert (driveHistoryNo, vehicleNo, obdDeviceNo, userNo, userMobileDeviceNo, startDate, startTime, startLatitude, startLongitude, startAddress, startMileage, endTime, endLatitude, endLongitude, endAddress, endMileage, driveDistance) SELECT driveHistoryNo, vehicleNo, obdDeviceNo, userNo, userMobileDeviceNo, startDate, startTime, startLatitude, startLongitude, startAddress, startMileage, endTime, endLatitude, endLongitude, endAddress, endMileage, driveDistance FROM DriveHistory</string>
+
+  <string name="sql_restore_user_insert" translatable="false">INSERT INTO User (userNo, partnerNo, partnerName, signProvider, email, name, hpNo, regDate) SELECT userNo, partnerNo, partnerName, signProvider, email, name, hpNo, regDate FROM UserInsert</string>
+  <string name="sql_restore_user_mobile_device_insert" translatable="false">INSERT INTO UserMobileDevice (userMobileDeviceNo, mobileDeviceNo, mobileNumber) SELECT userMobileDeviceNo, mobileDeviceNo, mobileNumber FROM UserMobileDeviceInsert</string>
+  <string name="sql_restore_obd_device_insert" translatable="false">INSERT INTO ObdDevice (obdDeviceNo, obdSerial, regDate) SELECT obdDeviceNo, obdSerial, regDate FROM ObdDeviceInsert</string>
+  <string name="sql_restore_vehicle_insert" translatable="false">INSERT INTO Vehicle (vehicleNo, modelNo, fuelNo, licenseNo, modelYear, modelMonth, regDate, modelName, fuelName, manufacturerNo, manufacturerName) SELECT vehicleNo, modelNo, fuelNo, licenseNo, modelYear, modelMonth, regDate, modelName, fuelName, manufacturerNo, manufacturerName FROM VehicleInsert</string>
+  <string name="sql_restore_drive_history_insert" translatable="false">INSERT INTO DriveHistory (driveHistoryNo, vehicleNo, obdDeviceNo, userNo, userMobileDeviceNo, startDate, startTime, startLatitude, startLongitude, startAddress, startMileage, endTime, endLatitude, endLongitude, endAddress, endMileage, driveDistance) SELECT driveHistoryNo, vehicleNo, obdDeviceNo, userNo, userMobileDeviceNo, startDate, startTime, startLatitude, startLongitude, startAddress, startMileage, endTime, endLatitude, endLongitude, endAddress, endMileage, driveDistance FROM DriveHistoryInsert</string>
+
+</resources>

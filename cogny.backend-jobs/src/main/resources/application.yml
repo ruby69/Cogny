@@ -1,0 +1,104 @@
+spring:
+  profiles.active: develop
+
+  datasource:
+    initialization-mode: never
+    hikari:
+      pool-name: hikariCp
+
+mybatis:
+  type-aliases-package: io.dymatics.cogny.domain.model
+  configuration:
+    map-underscore-to-camel-case: true
+
+server:
+  use-forward-headers: true
+  port: 8080
+  servlet:
+    context-path: /api
+  tomcat:
+    uri-encoding: UTF-8
+
+logging:
+  level:
+    root: INFO
+    org.apache.tomcat: false
+    org.springframework: INFO
+    io.dymatics.cogny.jobs: INFO
+    io.dymatics.cogny.domain.persist: INFO
+
+datastore:
+  kind-key: sensing_raw_dev
+
+batch:
+  diagnosis:
+    # x초 이내에 진단한 drive_history는 다시 진단하지 않는다.
+    diagnosis-interval-sec: 60
+    # 해당 시전 전후로 x초 이상동안 희박이 유지되는 경우만 희박으로 판정한다.
+    o2-s2-sparse-time-lag-sec: 2
+    # 마지막 sensing_raw가 수집되지 않은지 x 일 이후의 drive_history는 진단완료 처리한다.
+#    expire-drive-day: 2
+    # 마지막 sensing_raw가 수집되지 않은지 x분 이후의 drive_history는 진단완료 처리한다.
+    expire-drive-min: 10
+    # 공회전이 된 후 x초 지난 데이터만 유효한 공회전으로 판단한다.
+    stable-idle-sec-before: 30
+    # 공회전이 종료되고 속도가 0 이상이 된 시점이 x초 이후인 공회전만 유효한 공회전으로 판단한다. 최대 6초간 (5초  + 1초) 데이터 delay 발생 가능
+    stable-idle-sec-after: 6
+    # 냉각수 온도가 x ℃ 이후의 데이터만 피드백 제어를 시작하는 것으로 판단한다.(보통 65가 기준이나 보수적으로 70℃로 잡음)
+    valid-coolant-temp: 70
+
+---
+#####################################################################
+spring:
+  profiles: develop
+
+  datasource:
+    initialization-mode: never
+    url: jdbc:mariadb://localhost:3306/cogny_local
+    username: root
+    password: dlstjeoel09
+    
+
+logging:
+  level:
+    root: INFO
+#    io.dymatics.cogny.jobs: DEBUG
+#    io.dymatics.cogny.domain.model: DEBUG
+#    io.dymatics.cogny.domain.persist: DEBUG
+
+
+---
+#####################################################################
+spring:
+  profiles: test
+
+  datasource:
+    url: jdbc:mysql://10.0.0.1:3306/cogny_test
+    username: blue
+    password: 
+
+logging:
+  level:
+    root: INFO
+    io.dymatics.cogny.domain.persist: INFO
+
+datastore:
+  kind-key: sensing_raw_test
+
+---
+#####################################################################
+spring:
+  profiles: product
+
+  datasource:
+    url: jdbc:mysql://10.0.0.2:3306/cogny_product
+    username: blue
+    password: 
+
+logging:
+  level:
+    root: INFO
+    io.dymatics.cogny.domain.persist: INFO
+
+datastore:
+  kind-key: sensing_raw_product

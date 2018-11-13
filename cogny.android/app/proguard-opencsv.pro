@@ -1,0 +1,5 @@
+-dontwarn com.opencsv.**
+-dontwarn org.apache.commons.beanutils.**
+-dontwarn org.apache.commons.collections.**
+-keepattributes *Annotation*,Signature,InnerClasses,EnclosingMethod
+-dontoptimize

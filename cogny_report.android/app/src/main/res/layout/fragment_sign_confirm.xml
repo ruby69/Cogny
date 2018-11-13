@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_gravity="center"
+  android:gravity="center"
+  android:orientation="vertical">
+
+  <ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:src="@drawable/logo_report" />
+
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_8x"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/nameView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="코그니 회원가입을 감사드립니다."
+      android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+  </LinearLayout>
+
+  <Button
+    android:id="@+id/confirm"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_4x"
+    android:background="@drawable/button_bg_accent"
+    android:minWidth="300dp"
+    android:text="@string/label_sign_start_cogny"
+    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+    android:textColor="@android:color/white" />
+
+</LinearLayout>

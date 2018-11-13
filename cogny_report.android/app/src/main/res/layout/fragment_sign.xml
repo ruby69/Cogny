@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_gravity="center"
+  android:gravity="center"
+  android:orientation="vertical"
+  android:paddingStart="@dimen/spacing_4x"
+  android:paddingEnd="@dimen/spacing_4x">
+
+  <ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:src="@drawable/logo_report"/>
+
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_8x"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/nameView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+      android:visibility="gone"/>
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="코그니 회원으로 가입해 주세요."
+      android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+  </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/startWithGoogle"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/spacing_4x"
+      android:background="@drawable/button_bg_white"
+      android:gravity="center"
+      android:orientation="horizontal"
+      android:padding="@dimen/spacing_2x">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/google_logo"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_2x"
+        android:text="@string/label_sign_start_with_google"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@color/colorAccent"/>
+
+  </LinearLayout>
+
+</LinearLayout>

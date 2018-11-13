@@ -1,0 +1,14 @@
+*.git
+.gitignore
+.dockerignore
+.project
+
+docker-compose*.yml
+Dockerfile
+package*.json
+vue.config.js
+
+src
+public
+node_modules
+beagle-v1.4.2

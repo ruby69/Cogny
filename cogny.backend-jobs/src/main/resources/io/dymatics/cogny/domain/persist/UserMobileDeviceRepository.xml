@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.dymatics.cogny.domain.persist.UserMobileDeviceRepository">
+  <select id="findByNo" resultType="io.dymatics.cogny.domain.model.MobileDevice$UserMobileDevice">
+    SELECT * 
+    FROM `user_mobile_device` 
+    WHERE `user_mobile_device_no` = #{userMobileDeviceNo}
+  </select>
+  <select id="findByVehicleNo" resultType="io.dymatics.cogny.domain.model.MobileDevice$UserMobileDevice">
+    SELECT umd.*
+    FROM user_mobile_device umd
+        INNER JOIN `user` u ON u.user_no = umd.user_no
+        INNER JOIN vehicle v ON v.partner_no = u.partner_no
+    WHERE (u.role = 'PARTNER_MECHANIC' OR u.role = 'ADMIN')
+        AND u.user_status = 'MEMBER'
+        AND v.vehicle_no = #{vehicleNo}
+        AND umd.push_agree = TRUE
+        AND umd.fcm_token IS NOT NULL
+  </select>
+</mapper>
