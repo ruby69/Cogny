@@ -1,3 +1,6 @@
+# ⛔️ DEPRECATED
+This repository is now deprecated. 
+
 # Cogny
 OBDII를 장치를 이용한 자동차 고장진단 서비스.
 
